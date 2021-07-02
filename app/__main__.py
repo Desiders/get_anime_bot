@@ -15,6 +15,10 @@ async def set_bot_commands(bot: Bot):
     commands = [
         BotCommand(command="start", description="Get menu!"),
     ]
+    commands.extend([
+        BotCommand(command=command, description=f"Get {command}!")
+            for command in GetUrl.urls
+    ])
     await bot.set_my_commands(commands)
 
 

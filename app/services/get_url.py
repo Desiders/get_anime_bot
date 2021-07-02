@@ -1,5 +1,5 @@
 import asyncio
-import queue
+from queue import Empty, Queue
 from typing import List, Optional
 
 import aiohttp
@@ -7,7 +7,7 @@ import ujson
 
 
 class GetUrl(object):
-    urls: List[str] = [
+    urls: List[str] = [ # available genres
         'neko', 'waifu', 'shinobu', 'megumin', 'bully',
         'cuddle', 'cry', 'hug', 'awoo', 'kiss', 'lick', 
         'pat', 'smug', 'bonk', 'yeet', 'bluhs', 'smile',
@@ -17,11 +17,10 @@ class GetUrl(object):
     ]
 
     def __init__(self) -> None:
-        self._block_length: int = 60
+        self._block_length: int = 100 # number of requests if some queue is empty 
         self._session: Optional[aiohttp.ClientSession] = None
 
-        self.queues = {url: queue.Queue() for url in self.urls}
-        self.queues.update({"random": queue.Queue()})
+        self.queues = {url: Queue() for url in self.urls} # creating a queue for each genre
 
     def get_new_session(self) -> aiohttp.ClientSession:
         return aiohttp.ClientSession()
@@ -29,36 +28,37 @@ class GetUrl(object):
     @property
     def session(self) -> aiohttp.ClientSession:
         if self._session is None or self._session.closed:
-            self._session = self.get_new_session()
+            self._session = self.get_new_session() # creating new session if session is none
         return self._session
 
     async def close(self) -> None:
-        await self.session.close()
+        await self.session.close() # session close
     
-    async def get_urls(self, url: str, queue: queue.Queue) -> None:
+    async def get_urls(self, url: str, queue: Queue) -> None:
         tasks = list()
-        for _ in range(self._block_length):
+        for _ in range(self._block_length): # creating tasks for asynchronous requests
             task = asyncio.create_task(self.session.get(url))
             tasks.append(task)
 
         responses: List[aiohttp.ClientResponse] = await asyncio.gather(*tasks)
         for response in responses:
             result = await response.json(loads=ujson.loads)
-            if result not in queue.queue:
-                queue.put_nowait(result)
+            if result not in queue.queue: # if it is not a duplicate
+                queue.put_nowait(result) # putting url into the queue
 
     async def get_url(self, genre: str):
-        genre = genre.lower()
-        queue = self.queues[genre]
-        url = f"https://api.waifu.pics/sfw/{genre}"
-        if queue.empty():
-            await self.get_urls(url, queue)
-        while True:
+        genre = genre.lower() # api case-sensitive
+        queue = self.queues[genre] # getting queue of a certain genre
+        url = f"https://api.waifu.pics/sfw/{genre}" # url for the request
+
+        while True: # waiting correct url
             try:
-                url: str = queue.get_nowait()['url']
-            except queue.Empty:
+                url: str = queue.get_nowait()['url'] # getting url from the queue
+            except KeyError:
+                pass # continue
+            except Empty: # queue is empty
                 await self.get_urls(url, queue)
             else:
-                if not url.endswith(".png"):
+                if not url.endswith(".png"): # if url doesn't endswith ".png" otherwise new iteration
                     break
-        return url
+        return url 
