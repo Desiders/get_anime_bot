@@ -3,13 +3,12 @@ from queue import Empty, Queue
 from typing import List, Optional
 
 import aiohttp
-import ujson
 
 
 class GetUrl(object):
     urls: List[str] = [ # available genres
         'neko', 'waifu', 'shinobu', 'megumin', 'bully',
-        'cuddle', 'cry', 'hug', 'awoo', 'kiss', 'lick', 
+        'cuddle', 'cry', 'hug', 'awoo', 'kiss', 'lick',
         'pat', 'smug', 'bonk', 'yeet', 'bluhs', 'smile',
         'wave', 'highfive', 'handhold', 'nom', 'bite',
         'glomp', 'slap', 'kill', 'kick', 'happy', 'wink',
@@ -33,7 +32,7 @@ class GetUrl(object):
 
     async def close(self) -> None:
         await self.session.close() # session close
-    
+
     async def get_urls(self, url: str, queue: Queue) -> None:
         tasks = list()
         for _ in range(self._block_length): # creating tasks for asynchronous requests
@@ -42,13 +41,14 @@ class GetUrl(object):
 
         responses: List[aiohttp.ClientResponse] = await asyncio.gather(*tasks)
         for response in responses:
-            result = await response.json(loads=ujson.loads)
+            result = await response.json()
             if result not in queue.queue: # if it is not a duplicate
-                queue.put_nowait(result) # putting url into the queue
+                queue.put_nowait(result) # putting result into the queue
 
     async def get_url(self, genre: str):
         genre = genre.lower() # api case-sensitive
         queue = self.queues[genre] # getting queue of a certain genre
+
         url = f"https://api.waifu.pics/sfw/{genre}" # url for the request
 
         while True: # waiting correct url
@@ -56,9 +56,9 @@ class GetUrl(object):
                 url: str = queue.get_nowait()['url'] # getting url from the queue
             except KeyError:
                 pass # continue
-            except Empty: # queue is empty
-                await self.get_urls(url, queue)
+            except Empty:
+                await self.get_urls(url, queue) # creating tasks for asynchronous requests (new urls)
             else:
                 if not url.endswith(".png"): # if url doesn't endswith ".png" otherwise new iteration
                     break
-        return url 
+        return url
