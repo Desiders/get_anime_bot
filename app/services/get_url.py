@@ -9,14 +9,14 @@ class GetUrl(object):
     urls: List[str] = [ # available genres
         'neko', 'waifu', 'shinobu', 'megumin', 'bully',
         'cuddle', 'cry', 'hug', 'awoo', 'kiss', 'lick',
-        'pat', 'smug', 'bonk', 'yeet', 'bluhs', 'smile',
+        'pat', 'smug', 'bonk', 'yeet', 'blush', 'smile',
         'wave', 'highfive', 'handhold', 'nom', 'bite',
         'glomp', 'slap', 'kill', 'kick', 'happy', 'wink',
         'poke', 'dance', 'cringe'
     ]
 
     def __init__(self) -> None:
-        self._block_length: int = 100 # number of requests if some queue is empty 
+        self._block_length: int = 500 # number of requests if some queue is empty 
         self._session: Optional[aiohttp.ClientSession] = None
 
         self.queues = {url: Queue() for url in self.urls} # creating a queue for each genre
@@ -45,7 +45,7 @@ class GetUrl(object):
             if result not in queue.queue: # if it is not a duplicate
                 queue.put_nowait(result) # putting result into the queue
 
-    async def get_url(self, genre: str):
+    async def get_url(self, genre: str) -> str:
         genre = genre.lower() # api case-sensitive
         queue = self.queues[genre] # getting queue of a certain genre
 
@@ -55,10 +55,9 @@ class GetUrl(object):
             try:
                 url: str = queue.get_nowait()['url'] # getting url from the queue
             except KeyError:
-                pass # continue
+                continue
             except Empty:
                 await self.get_urls(url, queue) # creating tasks for asynchronous requests (new urls)
             else:
-                if not url.endswith(".png"): # if url doesn't endswith ".png" otherwise new iteration
-                    break
+                break
         return url

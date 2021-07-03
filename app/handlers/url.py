@@ -11,7 +11,7 @@ logger = logging.getLogger(__name__)
 
 async def command_get_url(message: Message, get_url: GetUrl) -> None:
     try:
-        user_input_genre = message.text
+        user_input_genre = message.text.split("@")[0]
         if user_input_genre == "/":
             raise KeyError
         else:
