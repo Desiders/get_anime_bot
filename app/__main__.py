@@ -1,5 +1,6 @@
 import asyncio
 import logging
+from os import getenv
 
 from aiogram import Bot, Dispatcher
 
@@ -14,8 +15,7 @@ async def main() -> None:
         level=logging.INFO,
         format="%(asctime)s - %(levelname)s - %(name)s - %(message)s"
     )
-    # bot = Bot(token=getenv("BOT_TOKEN"))
-    dispatcher = Dispatcher(Bot(token="1853209866:AAFZeNpiVboeynI8Dgc-QyTc0biKWi6s7EA"))
+    dispatcher = Dispatcher(Bot(token=getenv("BOT_TOKEN")))
     dispatcher['get_url'] = GetUrl()
 
     logger.info("Starting bot")
