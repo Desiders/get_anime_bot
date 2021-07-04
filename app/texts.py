@@ -11,3 +11,7 @@ GENRE_NOT_FOUND = (
 WHAT = (
     "What do you mean?"
 )
+ACCESS_DENIED = (
+    "Sorry, the source didn't return the photos, "
+    "please try again later or choose a different category!"
+)

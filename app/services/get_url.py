@@ -1,63 +1,139 @@
 import asyncio
+from itertools import chain
 from queue import Empty, Queue
-from typing import List, Optional
+from typing import Dict, List, Optional, Union
 
 import aiohttp
+from aiohttp import ContentTypeError
 
 
 class GetUrl(object):
-    urls: List[str] = [ # available genres
-        'neko', 'waifu', 'shinobu', 'megumin', 'bully',
-        'cuddle', 'cry', 'hug', 'awoo', 'kiss', 'lick',
-        'pat', 'smug', 'bonk', 'yeet', 'blush', 'smile',
-        'wave', 'highfive', 'handhold', 'nom', 'bite',
-        'glomp', 'slap', 'kill', 'kick', 'happy', 'wink',
-        'poke', 'dance', 'cringe'
-    ]
+    # available genres and sources
+    genres: Dict[str, List[str]] = {
+        "waifu": [
+            'neko', 'waifu', 'shinobu', 'megumin',
+            'bully', 'cuddle', 'cry', 'hug',
+            'awoo', 'kiss', 'lick', 'pat',
+            'smug', 'bonk', 'yeet', 'blush',
+            'smile', 'wave', 'highfive', 'handhold',
+            'nom', 'bite', 'glomp', 'slap',
+            'kill', 'kick', 'happy', 'wink',
+            'poke', 'dance', 'cringe'
+        ],
+        "computerfreaker": [
+            'neko', 'anime', 'baguette', 'dva',
+            'hug', 'trap', 'yuri'
+        ]
+    }
+
+    def __new__(cls):
+        cls.clear_genres = {genre for genre in list(
+            chain.from_iterable([
+                cls.genres[source] for source in cls.genres]))}
+        return super().__new__(cls)
 
     def __init__(self) -> None:
-        self._block_length: int = 500 # number of requests if some queue is empty 
+        # number of requests if some queue is empty
+        self._block_size: int = 300
         self._session: Optional[aiohttp.ClientSession] = None
 
-        self.queues = {url: Queue() for url in self.urls} # creating a queue for each genre
+        # creating a queue for each genre
+        self.queues = {genre: Queue() for genre in self.clear_genres}
 
     def get_new_session(self) -> aiohttp.ClientSession:
+        """
+        Get new session
+        """
         return aiohttp.ClientSession()
 
     @property
     def session(self) -> aiohttp.ClientSession:
+        """
+        Get session
+        """
         if self._session is None or self._session.closed:
-            self._session = self.get_new_session() # creating new session if session is none
+            # creating new session if session is none
+            self._session = self.get_new_session()
         return self._session
 
     async def close(self) -> None:
-        await self.session.close() # session close
+        """
+        Session close
+        """
+        await self.session.close()
 
-    async def get_urls(self, url: str, queue: Queue) -> None:
+    async def get_urls(self, url_source: Union[str, List[str]], queue: Queue) -> None:
+        """
+        Get urls and queue the result
+        """
         tasks = list()
-        for _ in range(self._block_length): # creating tasks for asynchronous requests
-            task = asyncio.create_task(self.session.get(url))
-            tasks.append(task)
+
+        # checking the number of request sources
+        if isinstance(url_source, str):
+            for _ in range(self._block_size):
+                task = asyncio.create_task(self.session.get(url_source))
+                tasks.append(task)
+        else:
+            for _ in range(self._block_size // 2):
+                first_task = asyncio.create_task(self.session.get(url_source[0]))
+                second_task = asyncio.create_task(self.session.get(url_source[1]))
+                tasks.extend([first_task, second_task])
 
         responses: List[aiohttp.ClientResponse] = await asyncio.gather(*tasks)
         for response in responses:
-            result = await response.json()
-            if result not in queue.queue: # if it is not a duplicate
-                queue.put_nowait(result) # putting result into the queue
+            try:
+                result = await response.json()
+            except ContentTypeError:
+                continue
+            # check for duplicates
+            if result not in queue.queue:
+                # queue the result
+                queue.put_nowait(result)
 
     async def get_url(self, genre: str) -> str:
-        genre = genre.lower() # api case-sensitive
-        queue = self.queues[genre] # getting queue of a certain genre
+        """
+        Get url
+        """
+        # api case-sensitive
+        genre = genre.lower()
 
-        url = f"https://api.waifu.pics/sfw/{genre}" # url for the request
+        # checking the genre source
+        genre_from_computerfreaker = genre in self.genres['computerfreaker']
+        genre_from_waifu = genre in self.genres['waifu']
 
-        while True: # waiting correct url
+        if genre_from_computerfreaker and genre_from_waifu:
+            # multiple sources
+            url_source = [
+                f"https://api.computerfreaker.cf/v1/{genre}",
+                f"https://api.waifu.pics/sfw/{genre}"
+            ]
+        elif genre_from_computerfreaker:
+            # one source
+            url_source = f"https://api.computerfreaker.cf/v1/{genre}"
+        elif genre_from_waifu:
+            # one source
+            url_source = f"https://api.waifu.pics/sfw/{genre}"
+        # missing genre
+        else:
+            raise KeyError
+
+        # getting a queue of genre
+        queue = self.queues[genre]
+
+        iterations = 0
+
+        # waiting a correct url
+        while True:
             try:
-                url: str = queue.get_nowait()['url'] # getting url from the queue
+                # getting url from the queue
+                url: str = queue.get_nowait()['url']
             except KeyError:
                 continue
             except Empty:
-                await self.get_urls(url, queue) # creating tasks for asynchronous requests (new urls)
+                if iterations >= 4:
+                    return None
+                iterations += 1
+                # requests to getting new urls as there are none
+                await self.get_urls(url_source, queue)
             else:
-                break
-        return url
+                return url

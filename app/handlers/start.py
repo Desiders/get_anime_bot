@@ -9,7 +9,6 @@ async def command_start(message: Message) -> None:
     await message.answer(
         text=START.format(
             full_name=md.quote_html(message.from_user.full_name),
-            genres=", ".join(f"/{md.hbold(url)}" for url in GetUrl.urls)),
+            genres = ", ".join("/{url}".format(url=md.hbold(url)) for url in GetUrl.clear_genres)),
         parse_mode="HTML", disable_web_page_preview=True,
-        reply_markup=ReplyKeyboardRemove()
-    )
+        reply_markup=ReplyKeyboardRemove(selective=True))
