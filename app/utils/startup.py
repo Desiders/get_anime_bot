@@ -1,5 +1,3 @@
-from itertools import chain
-
 from aiogram import Bot, Dispatcher
 from aiogram.contrib.middlewares.environment import EnvironmentMiddleware
 from aiogram.types import BotCommand
