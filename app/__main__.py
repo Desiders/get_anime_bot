@@ -1,11 +1,12 @@
 import asyncio
 import logging
-from os import getenv
 
 from aiogram import Bot, Dispatcher
 
-from .services import GetUrl
-from .utils import shutdown, startup
+from .config_reader import load_config
+from .services.database import RedisDB
+from .services.urls import GetUrl
+from .utils.startup import startup
 
 logger = logging.getLogger(__name__)
 
@@ -15,15 +16,25 @@ async def main() -> None:
         level=logging.INFO,
         format="%(asctime)s - %(levelname)s - %(name)s - %(message)s"
     )
-    dispatcher = Dispatcher(Bot(token=getenv("BOT_TOKEN")))
+
+    config = load_config()
+
+    dispatcher = Dispatcher(Bot(token=config.bot.token))
     dispatcher['get_url'] = GetUrl()
+    dispatcher['database'] = RedisDB(host=config.database.host,
+                                     port=config.database.port,
+                                     db=config.database.db,
+                                     password=config.database.password)
 
     logger.info("Starting bot")
     try:
         await startup(dispatcher)
         await dispatcher.start_polling(allowed_updates=['message_handlers'])
     finally:
-        await shutdown(dispatcher)
+        await dispatcher.bot.session.close()
+        await dispatcher['get_url'].close()
+        await dispatcher['database'].close()
+        await dispatcher['database'].wait_closed()
 
 
 try:

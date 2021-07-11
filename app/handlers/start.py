@@ -1,14 +1,16 @@
 from aiogram import md
 from aiogram.types import Message, ReplyKeyboardRemove
 
-from ..services import GetUrl
-from ..texts import START
+from .. import texts
+from ..utils.scripts import genres_format_text
 
 
-async def command_start(message: Message) -> None:
+async def command_start(message: Message):
     await message.answer(
-        text=START.format(
+        text=texts.START.format(
             full_name=md.quote_html(message.from_user.full_name),
-            genres = ", ".join("/{url}".format(url=md.hbold(url)) for url in GetUrl.clear_genres)),
-        parse_mode="HTML", disable_web_page_preview=True,
-        reply_markup=ReplyKeyboardRemove(selective=True))
+            genres=genres_format_text()
+        ),
+        parse_mode="HTML",
+        reply_markup=ReplyKeyboardRemove(selective=True)
+    )

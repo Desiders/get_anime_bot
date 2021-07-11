@@ -1,7 +1,13 @@
 from aiogram.types import Message
 
-from ..texts import WHAT
+from .. import texts
+from ..services.database import RedisDB
 
 
-async def command_what(message: Message) -> None:
-    await message.reply(WHAT, disable_web_page_preview=True)
+async def command_reset(message: Message, database: RedisDB):
+    await database.clear_received_urls(user_id=message.from_user.id)
+    await message.reply(text=texts.URLS_RESET)
+
+
+async def command_what(message: Message):
+    await message.reply(text=texts.WHAT)
