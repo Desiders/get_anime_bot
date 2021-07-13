@@ -12,15 +12,13 @@ async def set_bot_commands(bot: Bot):
     ]
     commands.extend([
         BotCommand(command=genre, description=f"Get {genre}!")
-            for genre in GetUrl.genres
+            for genre in GetUrl.sfw_genres
     ])
     await bot.set_my_commands(commands)
 
 
 async def startup(dispatcher: Dispatcher) -> None:
     await set_bot_commands(dispatcher.bot)
-
-    register_handlers(dispatcher)
 
     dispatcher.setup_middleware(
         EnvironmentMiddleware(
@@ -30,3 +28,5 @@ async def startup(dispatcher: Dispatcher) -> None:
             )
         )
     )
+
+    register_handlers(dispatcher)

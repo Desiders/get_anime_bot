@@ -29,7 +29,9 @@ async def main() -> None:
     logger.info("Starting bot")
     try:
         await startup(dispatcher)
-        await dispatcher.start_polling(allowed_updates=['message_handlers'])
+        await dispatcher.start_polling(
+            allowed_updates=['message_handlers', 'callback_query_handlers']
+        )
     finally:
         await dispatcher.bot.session.close()
         await dispatcher['get_url'].close()

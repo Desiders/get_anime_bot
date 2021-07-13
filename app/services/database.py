@@ -41,11 +41,11 @@ class RedisDB:
         redis = await self.redis()
         received_urls = await redis.smembers(generate_key(USER_KEY, user_id))
         return received_urls or list()
-    
+
     async def add_received_url(self, user_id: Union[str, int], url: str):
         redis = await self.redis()
         await redis.sadd(generate_key(USER_KEY, user_id), url)
-    
+
     async def clear_received_urls(self, user_id: Union[str, int]):
         redis = await self.redis()
         await redis.unlink(generate_key(USER_KEY, user_id))

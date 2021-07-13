@@ -10,14 +10,19 @@ from . import exceptions
 
 
 class GetUrl:
-    genres: List[str]
-    genres_format_text: Optional[List[str]] = None
+    sfw_genres: List[str]
+    nsfw_genres: List[str] = [
+        'nsfw_neko', 'nsfw_waifu', 'nsfw_trap',
+        'blowjob', 'dva', 'hentai'
+    ]
+    sfw_genres_format_text: Optional[str] = None
     source_and_url: Dict[str, str] = {
-        "waifu": "https://api.waifu.pics/sfw/",
-        "computerfreaker": "https://api.computerfreaker.cf/v1/"
+        "waifu_sfw": "https://api.waifu.pics/sfw",
+        "waifu_nsfw": "https://api.waifu.pics/nsfw",
+        "computerfreaker": "https://api.computerfreaker.cf/v1",
     }
     source_and_genres: Dict[str, List[str]] = {
-        "waifu": [
+        "waifu_sfw": [
             'neko', 'waifu', 'shinobu', 'megumin',
             'bully', 'cuddle', 'cry', 'hug',
             'awoo', 'kiss', 'lick', 'pat',
@@ -27,14 +32,15 @@ class GetUrl:
             'kill', 'kick', 'happy', 'wink',
             'poke', 'dance', 'cringe'
         ],
+        "waifu_nsfw": ['nsfw_neko', 'nsfw_waifu', 'nsfw_trap', 'blowjob'],
         "computerfreaker": [
             'neko', 'anime', 'baguette', 'dva',
-            'hug', 'trap', 'yuri'
+            'hug', 'yuri', 'hentai'
         ]
     }
 
     def __new__(cls) -> Type['GetUrl']:
-        cls.genres = list(
+        genres = list(
             dict.fromkeys(
                 itertools.chain.from_iterable([
                     cls.source_and_genres[source]
@@ -42,6 +48,11 @@ class GetUrl:
                 ])
             )
         )
+        cls.sfw_genres = [
+            genre
+                for genre in genres
+                    if genre not in cls.nsfw_genres
+        ]
         return super().__new__(cls)
 
     def __init__(self):
@@ -71,20 +82,17 @@ class GetUrl:
 
     async def get_url(self, url: str) -> str:
         response = await self.session.get(url, headers=self.headers.generate())
-        try:
-            response_dict = await response.json()
-        except aiohttp.ContentTypeError:
-            raise exceptions.SourceBlock
-        else:
-            url = response_dict['url']
-            return response_dict['url']
+        response_dict = await response.json()
+
+        url = response_dict['url']
+        return response_dict['url']
 
     async def get_url_without_duplicates(self, url: str, received_urls: List[str]) -> str:
         for iteration in range(1, 4):
             try:
                 url = await self.get_url(url)
-            except exceptions.SourceBlock:
-                if iteration > 1:
+            except aiohttp.ContentTypeError:
+                if iteration > 2:
                     raise exceptions.SourceBlock
             else:
                 if url not in received_urls:
@@ -93,10 +101,6 @@ class GetUrl:
         raise exceptions.UrlNotFound
 
     def get_url_for_request(self, genre: str) -> str:
-        genre = genre.lower()
-        if genre not in self.genres:
-            raise exceptions.UncnownGenre
-
         sources: List[str] = [
             source
                 for source in self.source_and_genres
@@ -104,8 +108,10 @@ class GetUrl:
         ]
         if len(sources) > 1:
             random.shuffle(sources)
-
         source = sources[0]
         source_url: str = self.source_and_url[source]
-        url = source_url + genre
+
+        if genre.startswith("nsfw_"):
+            _, genre = genre.split("_")
+        url = f"{source_url}/{genre}"
         return url

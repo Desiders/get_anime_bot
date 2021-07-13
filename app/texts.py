@@ -1,26 +1,61 @@
-START = (
+start_en = (
     "Hello, {full_name}!\n\n"
     "Available genres:"
-    "\n\n{genres}"
+    "\n\n{sfw_genres}"
 )
-GENRE_NOT_FOUND = (
-    "This genre is not found in the list of genres!\n\n"
-    "Available genres:"
-    "\n\n{genres}"
+start_ru = (
+    "Привет, {full_name}!\n\n"
+    "Доступные жанры:"
+    "\n\n{sfw_genres}"
 )
-URL_NOT_FOUND = (
-    "Many of the requested photos are duplicates, "
-    "the list of photos you have viewed has been reset, please try again!"
+url_not_found_en = (
+    "There are too many duplicates, the list of viewed photos/gifs has been reset!"
 )
-URLS_RESET = (
-    "The list of photos you have viewed has been reset!"
+url_not_found_ru = (
+    "Слишком много дубликатов, список просмотренных фотографий/гифок сброшен!"
 )
-SOURCE_BLOCK = (
-    "A duplicate photo was found, if this message appears, "
-    "it means that the number of viewed photos of this genre is very large, which may "
-    "increase the waiting time for a response, we recommend sending the /reset command "
-    "to reset the data or simply switch to another category!"
+urls_reset_en = (
+    "The list of photos/gifs you viewed has been reset!"
 )
-WHAT = (
-    "What do you mean?"
+urls_reset_ru = (
+    "Список просмотренных вами фотографий/гифок был сброшен!"
 )
+source_block_en = (
+    "Several duplicates were found during the search, it looks like you have too many views "
+    "for this genre, use the /reset command if you are concerned about this message!"
+)
+source_block_ru = (
+    "Во время поиска было найдено несколько дубликатов, похоже, у вас слишком много просмотренных "
+    "для этого жанра, используйте команду /reset, если вас беспокоит это сообщение!"
+)
+confirmation_en = (
+    "By clicking on the button below, you confirm that you have already reached the age of majority!"
+)
+confirmation_ru = (
+    "Нажав на кнопку ниже, вы подтверждаете то, что вы уже достигли совершеннолетнего возраста!"
+)
+confirmation_keyboard_en = (
+    "Confirm"
+)
+confirmation_keyboard_ru = (
+    "Подтвердить"
+)
+
+all_texts = {
+    "en": {
+        "start": start_en,
+        "url_not_found": url_not_found_en,
+        "urls_reset": urls_reset_en,
+        "source_block": source_block_en,
+        "confirmation": confirmation_en,
+        "confirmation_keyboard": confirmation_keyboard_en
+    },
+    "ru": {
+        "start": start_ru,
+        "url_not_found": url_not_found_ru,
+        "urls_reset": urls_reset_ru,
+        "source_block": source_block_ru,
+        "confirmation": confirmation_ru,
+        "confirmation_keyboard": confirmation_keyboard_ru
+    }
+}
