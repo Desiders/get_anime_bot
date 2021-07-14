@@ -8,11 +8,13 @@ start_ru = (
     "Доступные жанры:"
     "\n\n{sfw_genres}"
 )
-url_not_found_en = (
-    "There are too many duplicates, the list of viewed photos/gifs has been reset!"
+about_en = (
+    "Bot has open source code!\n\n"
+    "https://github.com/Desiders/get_anime_bot"
 )
-url_not_found_ru = (
-    "Слишком много дубликатов, список просмотренных фотографий/гифок сброшен!"
+about_ru = (
+    "У бота открыт исходный код!\n\n"
+    "https://github.com/Desiders/get_anime_bot"
 )
 urls_reset_en = (
     "The list of photos/gifs you viewed has been reset!"
@@ -20,13 +22,21 @@ urls_reset_en = (
 urls_reset_ru = (
     "Список просмотренных вами фотографий/гифок был сброшен!"
 )
-source_block_en = (
+many_duplicates_en = (
     "Several duplicates were found during the search, it looks like you have too many views "
     "for this genre, use the /reset command if you are concerned about this message!"
 )
-source_block_ru = (
+many_duplicates_ru = (
     "Во время поиска было найдено несколько дубликатов, похоже, у вас слишком много просмотренных "
     "для этого жанра, используйте команду /reset, если вас беспокоит это сообщение!"
+)
+source_block_en = (
+    "Sorry, the source didn't return anything, it looks like the load is too high, "
+    "please try again later!"
+)
+source_block_ru = (
+    "Извините, источник ничего не вернул, похоже слишком высокая нагрузка, повторите "
+    "попытку позднее!"
 )
 confirmation_en = (
     "By clicking on the button below, you confirm that you have already reached the age of majority!"
@@ -44,16 +54,18 @@ confirmation_keyboard_ru = (
 all_texts = {
     "en": {
         "start": start_en,
-        "url_not_found": url_not_found_en,
+        "about": about_en,
         "urls_reset": urls_reset_en,
+        "many_duplicates": many_duplicates_en,
         "source_block": source_block_en,
         "confirmation": confirmation_en,
         "confirmation_keyboard": confirmation_keyboard_en
     },
     "ru": {
         "start": start_ru,
-        "url_not_found": url_not_found_ru,
+        "about": about_ru,
         "urls_reset": urls_reset_ru,
+        "many_duplicates": many_duplicates_ru,
         "source_block": source_block_ru,
         "confirmation": confirmation_ru,
         "confirmation_keyboard": confirmation_keyboard_ru

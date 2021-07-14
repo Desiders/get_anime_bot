@@ -60,7 +60,7 @@ class GetUrl:
         self._headers: Optional[fake_headers.Headers] = None
 
     def get_new_session(self) -> aiohttp.ClientSession:
-        return aiohttp.ClientSession()
+        return aiohttp.ClientSession(timeout=aiohttp.ClientTimeout(total=3.0))
 
     @property
     def session(self) -> aiohttp.ClientSession:
@@ -85,20 +85,20 @@ class GetUrl:
         response_dict = await response.json()
 
         url = response_dict['url']
-        return response_dict['url']
+        return url
 
     async def get_url_without_duplicates(self, url: str, received_urls: List[str]) -> str:
-        for iteration in range(1, 4):
+        for timeout_sleep in range(1, 5):
             try:
                 url = await self.get_url(url)
             except aiohttp.ContentTypeError:
-                if iteration > 2:
-                    raise exceptions.SourceBlock
+                timeout_sleep = timeout_sleep / 4
             else:
                 if url not in received_urls:
                     return url
-            await asyncio.sleep(iteration)
-        raise exceptions.UrlNotFound
+                timeout_sleep = timeout_sleep / 8
+            await asyncio.sleep(timeout_sleep)
+        raise exceptions.ManyDuplicates
 
     def get_url_for_request(self, genre: str) -> str:
         sources: List[str] = [

@@ -22,7 +22,7 @@ class Config:
 
 
 def load_config() -> Config:
-    return Config(
+    config = Config(
         bot=Bot(
             token=getenv("BOT_TOKEN")
         ),
@@ -33,3 +33,4 @@ def load_config() -> Config:
             password=getenv("PASSWORD")
         )
     )
+    return config

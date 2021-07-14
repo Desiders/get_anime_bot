@@ -36,7 +36,7 @@ class RedisDB:
         async with self._connection_lock:
             if self._redis:
                 await self._redis.wait_closed()
-    
+
     async def get_received_urls(self, user_id: Union[str, int]) -> List[str]:
         redis = await self.redis()
         received_urls = await redis.smembers(generate_key(USER_KEY, user_id))

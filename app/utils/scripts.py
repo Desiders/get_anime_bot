@@ -1,7 +1,9 @@
 import collections
-from typing import Optional, Tuple, Union
+from typing import List, Optional, Tuple, Union
 
 from aiogram import md
+from aiogram.types import (InlineKeyboardButton, InlineKeyboardMarkup,
+                           KeyboardButton, ReplyKeyboardMarkup)
 
 from .. import texts
 from ..services.urls import GetUrl
@@ -42,3 +44,17 @@ def get_text(lang_code: Optional[str], text_name: str) -> str:
     language = get_language(lang_code)
     text = texts.all_texts[language][text_name]
     return text
+
+
+def create_reply_keyboard_markup(keyboard: List[List[KeyboardButton]]) -> ReplyKeyboardMarkup:
+    markup = ReplyKeyboardMarkup(
+        keyboard=keyboard,
+        resize_keyboard=True,
+        selective=True
+    )
+    return markup
+
+
+def create_inline_keyboard_markup(inline_keyboard: List[List[InlineKeyboardButton]]) -> InlineKeyboardMarkup:
+    markup = InlineKeyboardMarkup(inline_keyboard=inline_keyboard)
+    return markup
