@@ -1,0 +1,75 @@
+start:
+  ru:
+    "
+    Привет, {full_name}!\n\n
+    Доступные жанры:\n\n{sfw_genres}
+    "
+  en:
+    "
+    Hello, {full_name}!\n\n
+    Available genres:\n\n{sfw_genres}
+    "
+
+about:
+  ru:
+    "
+    У бота открыт исходный код!\n\n
+    https://github.com/Desiders/get_anime_bot
+    "
+  en:
+    "
+    Bot has open source code!\n\n
+    https://github.com/Desiders/get_anime_bot
+    "
+
+urls:
+  ru:
+    "
+    Список просмотренных вами фотографий/гифок был сброшен!
+    "
+  en:
+    "
+    The list of photos/gifs you viewed has been reset!
+    "
+
+many_duplicates:
+  ru:
+    "
+    Во время поиска было найдено 15 дубликатов подряд, похоже, у вас слишком много просмотренных
+    для этого жанра, используйте команду /reset, если вас беспокоит это сообщение!
+    "
+  en:
+    "
+    During the search, 15 duplicates were found in a row, it looks like you have too many viewed
+    for this genre, use the /reset command if you are concerned about this message!
+    "
+
+source_block:
+  ru:
+    "
+    Источник ничего не вернул, повторите попытку позднее или выберите другой жанр!
+    "
+  en:
+    "
+    The source didn't return anything, please try again later or choose a different genre!
+    "
+
+confirmation:
+  ru:
+    "
+    Нажав на кнопку ниже, вы подтверждаете то, что вы уже достигли совершеннолетнего возраста!
+    "
+  en:
+    "
+    By clicking on the button below, you confirm that you have already reached the age of majority!
+    "
+
+confirmation_keyboard:
+  ru:
+    "
+    Подтвердить
+    "
+  en:
+    "
+    Confirm
+    "

@@ -88,15 +88,15 @@ class GetUrl:
         return url
 
     async def get_url_without_duplicates(self, url: str, received_urls: List[str]) -> str:
-        for timeout_sleep in range(1, 5):
+        for timeout_sleep in range(1, 15):
             try:
                 url = await self.get_url(url)
             except aiohttp.ContentTypeError:
-                timeout_sleep = timeout_sleep / 4
+                timeout_sleep = timeout_sleep / 15
             else:
                 if url not in received_urls:
                     return url
-                timeout_sleep = timeout_sleep / 8
+                timeout_sleep = timeout_sleep / 20
             await asyncio.sleep(timeout_sleep)
         raise exceptions.ManyDuplicates
 

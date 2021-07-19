@@ -17,16 +17,16 @@ async def set_bot_commands(bot: Bot):
     await bot.set_my_commands(commands)
 
 
-async def startup(dispatcher: Dispatcher) -> None:
-    await set_bot_commands(dispatcher.bot)
+async def startup(dp: Dispatcher) -> None:
+    await set_bot_commands(dp.bot)
 
-    dispatcher.setup_middleware(
+    dp.setup_middleware(
         EnvironmentMiddleware(
             dict(
-                get_url=dispatcher['get_url'],
-                database=dispatcher['database']
+                get_url=dp['get_url'],
+                database=dp['database']
             )
         )
     )
 
-    register_handlers(dispatcher)
+    register_handlers(dp)

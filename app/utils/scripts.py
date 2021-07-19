@@ -1,11 +1,9 @@
-import collections
-from typing import List, Optional, Tuple, Union
+from typing import List, Tuple, Union
 
 from aiogram import md
 from aiogram.types import (InlineKeyboardButton, InlineKeyboardMarkup,
                            KeyboardButton, ReplyKeyboardMarkup)
 
-from .. import texts
 from ..services.urls import GetUrl
 
 
@@ -31,19 +29,6 @@ def get_genre_and_mode(command: str) -> Tuple[str, str, bool]:
 
 def generate_key(key: str, param: Union[str, int]) -> str:
     return f"{key}:{param}"
-
-
-def get_language(lang_code: Optional[str]) -> str:
-    languages = collections.defaultdict(
-        lambda: "en", dict(ru="ru")
-    )
-    return languages[lang_code.split("-")[0]] if lang_code else "en"
-
-
-def get_text(lang_code: Optional[str], text_name: str) -> str:
-    language = get_language(lang_code)
-    text = texts.all_texts[language][text_name]
-    return text
 
 
 def create_reply_keyboard_markup(keyboard: List[List[KeyboardButton]]) -> ReplyKeyboardMarkup:

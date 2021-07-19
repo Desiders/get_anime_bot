@@ -19,24 +19,26 @@ async def main() -> None:
 
     config = load_config()
 
-    dispatcher = Dispatcher(Bot(token=config.bot.token))
-    dispatcher['get_url'] = GetUrl()
-    dispatcher['database'] = RedisDB(host=config.database.host,
-                                     port=config.database.port,
-                                     db=config.database.db,
-                                     password=config.database.password)
+    dp = Dispatcher(Bot(token=config.bot.token))
+    dp['get_url'] = GetUrl()
+    dp['database'] = RedisDB(
+        host=config.database.host,
+        port=config.database.port,
+        db=config.database.db,
+        password=config.database.password
+    )
 
     logger.info("Starting bot")
     try:
-        await startup(dispatcher)
-        await dispatcher.start_polling(
+        await startup(dp)
+        await dp.start_polling(
             allowed_updates=['message_handlers', 'callback_query_handlers']
         )
     finally:
-        await dispatcher.bot.session.close()
-        await dispatcher['get_url'].close()
-        await dispatcher['database'].close()
-        await dispatcher['database'].wait_closed()
+        await dp.bot.session.close()
+        await dp['get_url'].close()
+        await dp['database'].close()
+        await dp['database'].wait_closed()
 
 
 try:
