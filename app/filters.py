@@ -14,8 +14,9 @@ class CheckCommandFilter(BoundFilter):
         command = message.get_command(pure=True)
         if command is None:
             return False
-        command = command.lower()
-        command, *_ = command.split("_full")
+
+        command, *_ = command.lower().rsplit("_full", maxsplit=1)
+
         if self.is_sfw:
             return command in GetUrl.sfw_genres
         return command in GetUrl.nsfw_genres

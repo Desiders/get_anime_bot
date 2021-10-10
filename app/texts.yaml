@@ -2,12 +2,14 @@ start:
   ru:
     "
     Привет, {full_name}!\n\n
-    Доступные жанры:\n\n{sfw_genres}
+    Доступные жанры:\n\n{sfw_genres}\n\n
+    /source - исходный код
     "
   en:
     "
     Hello, {full_name}!\n\n
-    Available genres:\n\n{sfw_genres}
+    Available genres:\n\n{sfw_genres}\n\n
+    /source - source code
     "
 
 about:
@@ -22,25 +24,25 @@ about:
     https://github.com/Desiders/get_anime_bot
     "
 
-urls:
+urls_reset:
   ru:
     "
-    Список просмотренных вами фотографий/гифок был сброшен!
+    Список просмотренных вами медиафайлов был сброшен!
     "
   en:
     "
-    The list of photos/gifs you viewed has been reset!
+    The list of mediafiles you viewed has been reset!
     "
 
 many_duplicates:
   ru:
     "
-    Во время поиска было найдено 15 дубликатов подряд, похоже, у вас слишком много просмотренных
+    Во время поиска было найдено 30 дубликатов подряд, похоже, у вас слишком много просмотренных
     для этого жанра, используйте команду /reset, если вас беспокоит это сообщение!
     "
   en:
     "
-    During the search, 15 duplicates were found in a row, it looks like you have too many viewed
+    During the search, 30 duplicates were found in a row, it looks like you have too many viewed
     for this genre, use the /reset command if you are concerned about this message!
     "
 

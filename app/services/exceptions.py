@@ -1,2 +1,6 @@
-class ManyDuplicates(Exception): ...
-class UncnownGenre(Exception): ...
+class ManyDuplicates(Exception):
+    pass
+
+
+class UncnownGenre(Exception):
+    pass

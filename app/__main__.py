@@ -11,28 +11,28 @@ from .utils.startup import startup
 logger = logging.getLogger(__name__)
 
 
-async def main() -> None:
+async def main():
     logging.basicConfig(
         level=logging.INFO,
-        format="%(asctime)s - %(levelname)s - %(name)s - %(message)s"
+        format="%(asctime)s - %(levelname)s - %(name)s - %(message)s",
     )
 
     config = load_config()
 
-    dp = Dispatcher(Bot(token=config.bot.token))
+    dp = Dispatcher(Bot(config.bot.token))
     dp['get_url'] = GetUrl()
     dp['database'] = RedisDB(
         host=config.database.host,
         port=config.database.port,
         db=config.database.db,
-        password=config.database.password
+        password=config.database.password,
     )
 
     logger.info("Starting bot")
     try:
         await startup(dp)
         await dp.start_polling(
-            allowed_updates=['message_handlers', 'callback_query_handlers']
+            allowed_updates=['message_handlers', 'callback_query_handlers'],
         )
     finally:
         await dp.bot.session.close()

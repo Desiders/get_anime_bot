@@ -1,7 +1,7 @@
 import asyncio
 import itertools
 import random
-from typing import Dict, List, Optional, Type
+import typing
 
 import aiohttp
 import fake_headers
@@ -10,18 +10,29 @@ from . import exceptions
 
 
 class GetUrl:
-    sfw_genres: List[str]
-    nsfw_genres: List[str] = [
-        'nsfw_neko', 'nsfw_waifu', 'nsfw_trap',
-        'blowjob', 'dva', 'hentai'
+    __hash__ = None
+
+    sfw_genres: typing.List[str]
+    sfw_genres_format_text: typing.Optional[str] = None
+
+    nsfw_genres = [
+        'nsfw_neko', 'nsfw_waifu', 'nsfw_trap', 'blowjob',
+        'hentai', '4k', 'ass', 'boobs',
+        'cum', 'feet', 'spank', 'gasm',
+        'lesbian', 'lewd', 'pussy', 'bellevid',
+        'gif', 'anal', 'feet', 'holo',
+        'futanari', 'hololewd', 'lewdkemo', 'solog',
+        'feetg', 'erokemo', 'les', 'lewdk',
     ]
-    sfw_genres_format_text: Optional[str] = None
-    source_and_url: Dict[str, str] = {
+
+    url_by_source = {
         "waifu_sfw": "https://api.waifu.pics/sfw",
         "waifu_nsfw": "https://api.waifu.pics/nsfw",
-        "computerfreaker": "https://api.computerfreaker.cf/v1",
+        "nekos.fun": "http://api.nekos.fun:8080/api",
+        "nekos.life": "https://nekos.life/api/v2/img",
     }
-    source_and_genres: Dict[str, List[str]] = {
+
+    genres_by_source = {
         "waifu_sfw": [
             'neko', 'waifu', 'shinobu', 'megumin',
             'bully', 'cuddle', 'cry', 'hug',
@@ -30,37 +41,55 @@ class GetUrl:
             'smile', 'wave', 'highfive', 'handhold',
             'nom', 'bite', 'glomp', 'slap',
             'kill', 'kick', 'happy', 'wink',
-            'poke', 'dance', 'cringe'
+            'poke', 'dance', 'cringe',
         ],
-        "waifu_nsfw": ['nsfw_neko', 'nsfw_waifu', 'nsfw_trap', 'blowjob'],
-        "computerfreaker": [
-            'neko', 'anime', 'baguette', 'dva',
-            'hug', 'yuri', 'hentai'
+        "waifu_nsfw": [
+            'nsfw_neko', 'nsfw_waifu', 'nsfw_trap', 'blowjob',
+        ],
+        "nekos.fun": [
+            'kiss', 'lick', 'hug', 'baka',
+            'cry', 'poke', 'smug', 'slap',
+            'tickle', 'pat', 'laugh', 'feed',
+            'cuddle', '4k', 'ass', 'blowjob',
+            'boobs', 'cum', 'feet', 'hentai',
+            'wallpapers', 'spank', 'gasm', 'lesbian',
+            'lewd', 'pussy', 'bellevid', 'gif',
+            'anal', 'feed', 'animalears', 'feet',
+            'holo', 'foxgirl', 'baka', 'neko',
+        ],
+        "nekos.life": [
+            'feet', 'yuri', 'nsfw_trap', 'futanari',
+            'hololewd', 'lewdkemo', 'solog', 'feetg',
+            'cum', 'erokemo', 'les', 'lewdk',
+            'ngif', 'tickle',
         ]
     }
 
-    def __new__(cls) -> Type['GetUrl']:
+    def __new__(cls) -> 'GetUrl':
         genres = list(
             dict.fromkeys(
                 itertools.chain.from_iterable([
-                    cls.source_and_genres[source]
-                        for source in cls.source_and_genres
+                    cls.genres_by_source[source]
+                    for source in cls.genres_by_source
                 ])
             )
         )
         cls.sfw_genres = [
             genre
-                for genre in genres
-                    if genre not in cls.nsfw_genres
+            for genre in genres
+            if genre not in cls.nsfw_genres
         ]
+
         return super().__new__(cls)
 
     def __init__(self):
-        self._session: Optional[aiohttp.ClientSession] = None
-        self._headers: Optional[fake_headers.Headers] = None
+        self._session: typing.Optional[aiohttp.ClientSession] = None
+        self._headers: typing.Optional[fake_headers.Headers] = None
 
     def get_new_session(self) -> aiohttp.ClientSession:
-        return aiohttp.ClientSession(timeout=aiohttp.ClientTimeout(total=3.0))
+        return aiohttp.ClientSession(
+            timeout=aiohttp.ClientTimeout(total=3.0),
+        )
 
     @property
     def session(self) -> aiohttp.ClientSession:
@@ -82,36 +111,39 @@ class GetUrl:
 
     async def get_url(self, url: str) -> str:
         response = await self.session.get(url, headers=self.headers.generate())
-        response_dict = await response.json()
+        response_json = await response.json()
 
-        url = response_dict['url']
-        return url
+        return response_json.get("url") or response_json['image']
 
-    async def get_url_without_duplicates(self, url: str, received_urls: List[str]) -> str:
-        for timeout_sleep in range(1, 15):
+    async def get_url_without_duplicates(
+        self,
+        url: str,
+        received_urls: typing.List[str],
+    ) -> str:
+        for _ in range(1, 30):
             try:
                 url = await self.get_url(url)
             except aiohttp.ContentTypeError:
-                timeout_sleep = timeout_sleep / 15
+                pass
             else:
                 if url not in received_urls:
                     return url
-                timeout_sleep = timeout_sleep / 20
-            await asyncio.sleep(timeout_sleep)
+            await asyncio.sleep(0.1)
         raise exceptions.ManyDuplicates
 
     def get_url_for_request(self, genre: str) -> str:
-        sources: List[str] = [
+        sources = [
             source
-                for source in self.source_and_genres
-                  if genre in self.source_and_genres[source]
+            for source in self.genres_by_source
+            if genre in self.genres_by_source[source]
         ]
         if len(sources) > 1:
             random.shuffle(sources)
+
         source = sources[0]
-        source_url: str = self.source_and_url[source]
+        source_url = self.url_by_source[source]
 
         if genre.startswith("nsfw_"):
-            _, genre = genre.split("_")
-        url = f"{source_url}/{genre}"
-        return url
+            _, genre = genre.split("_", maxsplit=1)
+
+        return f"{source_url}/{genre}"

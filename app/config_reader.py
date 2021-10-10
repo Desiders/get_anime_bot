@@ -1,13 +1,13 @@
-from dataclasses import dataclass
-from os import getenv
+import dataclasses
+import os
 
 
-@dataclass
+@dataclasses.dataclass(frozen=True)
 class Bot:
     token: str
 
 
-@dataclass
+@dataclasses.dataclass(frozen=True)
 class Database:
     host: str
     port: int
@@ -15,22 +15,21 @@ class Database:
     password: str
 
 
-@dataclass
+@dataclasses.dataclass(frozen=True)
 class Config:
     bot: Bot
     database: Database
 
 
 def load_config() -> Config:
-    config = Config(
+    return Config(
         bot=Bot(
-            token=getenv("BOT_TOKEN")
+            token=os.getenv("BOT_TOKEN"),
         ),
         database=Database(
-            host=getenv("HOST"),
-            port=int(getenv("PORT")),
-            db=int(getenv("DB")),
-            password=getenv("PASSWORD")
-        )
+            host=os.getenv("HOST"),
+            port=int(os.getenv("PORT")),
+            db=int(os.getenv("DB")),
+            password=os.getenv("PASSWORD"),
+        ),
     )
-    return config

@@ -1,9 +1,9 @@
 import asyncio
-from typing import List, Optional, Union
+import typing
 
 import aioredis
 
-from ..utils.scripts import generate_key
+from ..utils import scripts
 
 USER_KEY = "user_urls"
 
@@ -15,16 +15,18 @@ class RedisDB:
         self._password = password
         self._db = db
 
-        self._redis: Optional[aioredis.RedisConnection] = None
+        self._redis: typing.Optional[aioredis.RedisConnection] = None
         self._connection_lock = asyncio.Lock()
 
     async def redis(self) -> aioredis.Redis:
         async with self._connection_lock:
             if self._redis is None or self._redis.closed:
-                self._redis = await aioredis.create_redis_pool(address=(self._host, self._port),
-                                                               password=self._password,
-                                                               db=self._db,
-                                                               encoding="utf-8")
+                self._redis = await aioredis.create_redis_pool(
+                    address=(self._host, self._port),
+                    password=self._password,
+                    db=self._db,
+                    encoding="utf-8",
+                )
         return self._redis
 
     async def close(self):
@@ -37,15 +39,29 @@ class RedisDB:
             if self._redis:
                 await self._redis.wait_closed()
 
-    async def get_received_urls(self, user_id: Union[str, int]) -> List[str]:
+    async def get_received_urls(
+        self,
+        user_id: typing.Union[str, int],
+    ) -> typing.List[str]:
         redis = await self.redis()
-        received_urls = await redis.smembers(generate_key(USER_KEY, user_id))
-        return received_urls or list()
 
-    async def add_received_url(self, user_id: Union[str, int], url: str):
-        redis = await self.redis()
-        await redis.sadd(generate_key(USER_KEY, user_id), url)
+        received_urls = await redis.smembers(scripts.generate_key(USER_KEY, user_id))
 
-    async def clear_received_urls(self, user_id: Union[str, int]):
+        return received_urls or []
+
+    async def add_received_url(
+        self,
+        user_id: typing.Union[str, int],
+        url: str,
+    ):
         redis = await self.redis()
-        await redis.unlink(generate_key(USER_KEY, user_id))
+
+        await redis.sadd(scripts.generate_key(USER_KEY, user_id), url)
+
+    async def clear_received_urls(
+        self,
+        user_id: typing.Union[str, int],
+    ):
+        redis = await self.redis()
+
+        await redis.unlink(scripts.generate_key(USER_KEY, user_id))
