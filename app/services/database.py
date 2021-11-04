@@ -45,7 +45,9 @@ class RedisDB:
     ) -> typing.List[str]:
         redis = await self.redis()
 
-        received_urls = await redis.smembers(scripts.generate_key(USER_KEY, user_id))
+        received_urls = await redis.smembers(
+            key=scripts.generate_key(USER_KEY, user_id),
+        )
 
         return received_urls or []
 
@@ -56,7 +58,10 @@ class RedisDB:
     ):
         redis = await self.redis()
 
-        await redis.sadd(scripts.generate_key(USER_KEY, user_id), url)
+        await redis.sadd(
+            key=scripts.generate_key(USER_KEY, user_id),
+            member=url,
+        )
 
     async def clear_received_urls(
         self,
@@ -64,4 +69,6 @@ class RedisDB:
     ):
         redis = await self.redis()
 
-        await redis.unlink(scripts.generate_key(USER_KEY, user_id))
+        await redis.unlink(
+            key=scripts.generate_key(USER_KEY, user_id),
+        )

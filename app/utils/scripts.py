@@ -45,4 +45,6 @@ def create_reply_keyboard_markup(
 def create_inline_keyboard_markup(
     inline_keyboard: typing.List[typing.List[types.InlineKeyboardButton]],
 ) -> types.InlineKeyboardMarkup:
-    return types.InlineKeyboardMarkup(inline_keyboard=inline_keyboard)
+    return types.InlineKeyboardMarkup(
+        inline_keyboard=inline_keyboard,
+    )

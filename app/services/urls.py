@@ -11,18 +11,22 @@ from . import exceptions
 
 class GetUrl:
     __hash__ = None
+    __slots__ = (
+        '_session',
+        '_headers',
+    )
 
     sfw_genres: typing.List[str]
     sfw_genres_format_text: typing.Optional[str] = None
 
     nsfw_genres = [
         'nsfw_neko', 'nsfw_waifu', 'nsfw_trap', 'blowjob',
-        'hentai', '4k', 'ass', 'boobs',
-        'cum', 'feet', 'spank', 'gasm',
-        'lesbian', 'lewd', 'pussy', 'bellevid',
-        'gif', 'anal', 'feet', 'holo',
-        'futanari', 'hololewd', 'lewdkemo', 'solog',
-        'feetg', 'erokemo', 'les', 'lewdk',
+        'hentai', 'ass', 'boobs', 'cum',
+        'feet', 'spank', 'gasm', 'lesbian',
+        'lewd', 'pussy', 'bellevid', 'gif',
+        'anal', 'feet', 'holo', 'futanari',
+        'hololewd', 'lewdkemo', 'solog', 'feetg',
+        'erokemo', 'les', 'lewdk', 'yuri',
     ]
 
     url_by_source = {
@@ -50,7 +54,7 @@ class GetUrl:
             'kiss', 'lick', 'hug', 'baka',
             'cry', 'poke', 'smug', 'slap',
             'tickle', 'pat', 'laugh', 'feed',
-            'cuddle', '4k', 'ass', 'blowjob',
+            'cuddle', 'ass', 'blowjob',
             'boobs', 'cum', 'feet', 'hentai',
             'wallpapers', 'spank', 'gasm', 'lesbian',
             'lewd', 'pussy', 'bellevid', 'gif',
@@ -58,7 +62,7 @@ class GetUrl:
             'holo', 'foxgirl', 'baka', 'neko',
         ],
         "nekos.life": [
-            'feet', 'yuri', 'nsfw_trap', 'futanari',
+            'feet', 'nsfw_trap', 'futanari',
             'hololewd', 'lewdkemo', 'solog', 'feetg',
             'cum', 'erokemo', 'les', 'lewdk',
             'ngif', 'tickle',
@@ -88,7 +92,7 @@ class GetUrl:
 
     def get_new_session(self) -> aiohttp.ClientSession:
         return aiohttp.ClientSession(
-            timeout=aiohttp.ClientTimeout(total=3.0),
+            timeout=aiohttp.ClientTimeout(total=1.5),
         )
 
     @property
@@ -111,7 +115,7 @@ class GetUrl:
 
     async def get_url(self, url: str) -> str:
         response = await self.session.get(url, headers=self.headers.generate())
-        response_json = await response.json()
+        response_json: dict[str, str] = await response.json()
 
         return response_json.get("url") or response_json['image']
 
@@ -120,7 +124,7 @@ class GetUrl:
         url: str,
         received_urls: typing.List[str],
     ) -> str:
-        for _ in range(1, 30):
+        for _ in range(30):
             try:
                 url = await self.get_url(url)
             except aiohttp.ContentTypeError:
@@ -128,7 +132,7 @@ class GetUrl:
             else:
                 if url not in received_urls:
                     return url
-            await asyncio.sleep(0.1)
+            await asyncio.sleep(0.05)
         raise exceptions.ManyDuplicates
 
     def get_url_for_request(self, genre: str) -> str:

@@ -27,5 +27,5 @@ async def command_about(message: types.Message):
             keyboard=[
                 [types.KeyboardButton("/start")],
             ]
-        )
+        ),
     )
