@@ -7,5 +7,3 @@ services:
             dockerfile: Dockerfile
         stop_signal: SIGINT
         restart: "unless-stopped"
-        volumes:
-          - config.ini

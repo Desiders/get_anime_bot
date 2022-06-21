@@ -1,4 +1,5 @@
 LICENCE
+README.md
 
 .gitignore
 
@@ -7,3 +8,6 @@ mypy.ini
 tox.ini
 
 requirements-dev.txt
+
+docker-compose.yml
+Dockerfile
