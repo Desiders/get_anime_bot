@@ -1,6 +1,5 @@
 aiohttp>=3.7.2,<4.0.0
 aiogram>=2.13,<3.0.0
-SQLAlchemy2-stubs>=0.0.2a22
 sqlalchemy~=1.4.37
 asyncpg>=0.24.0<1.0.0
 pydantic~=1.9.0
