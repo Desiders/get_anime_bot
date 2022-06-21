@@ -90,8 +90,6 @@ async def genre_cmd(
     try:
         source_model = await uow.sources.get_by_name(source_name)
     except NoResultFound:
-        logger.warning("Source not found", source=source)
-
         # save the source to the database
         await uow.sources.create(source_name, source.SOURCE_URL)
         await uow.commit()
@@ -108,7 +106,7 @@ async def genre_cmd(
             genre=media.raw_genre,
         )
     except IntegrityError:
-        logger.warning("Media already exists", media=media)
+        pass
     else:
         await uow.commit()
 
