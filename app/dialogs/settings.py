@@ -1,0 +1,68 @@
+import operator
+
+from aiogram.dispatcher.filters.state import State, StatesGroup
+from aiogram.types import CallbackQuery
+from aiogram_dialog import Dialog, DialogManager, Window
+from aiogram_dialog.manager.protocols import LaunchMode
+from aiogram_dialog.widgets.kbd import Radio
+from aiogram_dialog.widgets.text import Const, Format
+from app.infrastructure.database.repositories.uow import UnitOfWork
+from app.typehints import I18nGettext
+
+
+class Settings(StatesGroup):
+    main = State()
+    select = State()
+
+
+async def get_data(_: I18nGettext, **kwargs):
+    show_nsfw_settings = [
+        (_("Show nsfw"), "show"),
+        (_("Hide nsfw"), "hide"),
+    ]
+
+    return {
+        "show_nsfw_settings": show_nsfw_settings,
+    }
+
+
+async def select_show_nsfw_setting(
+    c: CallbackQuery,
+    button: Radio,
+    manager: DialogManager,
+    show_nsfw_string: str,
+):
+    if button.get_checked(manager) == show_nsfw_string:
+        await c.answer()
+        return
+
+    show_nsfw = show_nsfw_string == "show"
+
+    uow: UnitOfWork = c.bot["uow"]
+
+    await uow.users.update_show_nsfw(
+        c.from_user.id, show_nsfw,
+    )
+    await uow.commit()
+
+    await c.answer()
+
+
+dialog = Dialog(
+    Window(
+        Const("Choose your settings:"),
+        Radio(
+            checked_text=Format("✓ {item[0]}"),
+            unchecked_text=Format("{item[0]}"),
+            id="show_nsfw",
+            item_id_getter=operator.itemgetter(1),
+            items="show_nsfw_settings",
+            on_click=select_show_nsfw_setting,
+        ),
+        state=Settings.main,
+        getter=get_data,
+        parse_mode="HTML",
+        disable_web_page_preview=True,
+    ),
+    launch_mode=LaunchMode.STANDARD,
+)

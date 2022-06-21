@@ -1,4 +1,9 @@
 LICENCE
 
 .gitignore
-.env.example
+
+config_example.ini
+mypy.ini
+tox.ini
+
+requirements-dev.txt
