@@ -68,8 +68,6 @@ class WaifuPics(MediaSource):
 
         result = await response.json()
 
-        logger.info("Got result", result=result)
-
         if many:
             return [
                 Media(

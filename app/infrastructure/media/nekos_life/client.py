@@ -63,8 +63,6 @@ class NekosLife(MediaSource):
 
         result = await response.json()
 
-        logger.info("Got result", result=result)
-
         if url := result["data"]["response"].get("url"):
             return [
                 Media(

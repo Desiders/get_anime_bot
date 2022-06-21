@@ -66,8 +66,6 @@ class NekosFun(MediaSource):
 
                 result = await response.json()
 
-                logger.info("Got result", result=result)
-
                 media.append(
                     Media(
                         url=result["image"],
@@ -82,8 +80,6 @@ class NekosFun(MediaSource):
         response.raise_for_status()
 
         result = await response.json()
-
-        logger.info("Got result", result=result)
 
         return [
             Media(
