@@ -8,13 +8,12 @@ def make_connection_string(
     async_fallback: bool = False,
 ) -> str:
     return (
-        "{driver}://{user}:{password}@{host}:{port}/{name}"
+        "postgresql+asyncpg://{user}:{password}@{host}:{port}/{name}"
         "?async_fallback={async_fallback}"
     ).format(
-        driver=database.driver, user=database.user,
-        password=database.password, host=database.host,
-        port=database.port, name=database.name,
-        async_fallback=async_fallback,
+        user=database.user, password=database.password,
+        host=database.host, port=database.port,
+        name=database.name, async_fallback=async_fallback,
     )
 
 

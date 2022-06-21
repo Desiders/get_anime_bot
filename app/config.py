@@ -1,44 +1,48 @@
-from configparser import ConfigParser
-from typing import Union
-
-from pydantic import BaseModel
+from pydantic import BaseSettings, validator
 
 
-class Bot(BaseModel):
+class Bot(BaseSettings):
     token: str
 
 
-class Database(BaseModel):
-    driver: str
+class Database(BaseSettings):
     user: str
     password: str
     host: str
-    port: Union[str, int]
+    port: int
     name: str
 
 
-class Config(BaseModel):
+class SettingsExtractor(BaseSettings):
+    # telegram bot
+    BOT_TOKEN: str
+
+    # database
+    DB_USER: str
+    DB_PASSWORD: str
+    DB_HOST: str
+    DB_PORT: int
+    DB_NAME: str
+
+
+class Settings(BaseSettings):
     bot: Bot
     database: Database
 
+    class Config:
+        env_file_encoding = "utf-8"
 
-def load_config(path: str) -> Config:
-    config = ConfigParser()
-    config.read(path)
 
-    bot = config["bot"]
-    database = config["database"]
+def load_config() -> Settings:
+    settings = SettingsExtractor()
 
-    return Config(
-        bot=Bot(
-            token=bot["token"],
-        ),
+    return Settings(
+        bot=Bot(token=settings.BOT_TOKEN),
         database=Database(
-            driver=database["driver"],
-            user=database["user"],
-            password=database["password"],
-            host=database["host"],
-            port=database["port"],
-            name=database["name"],
+            user=settings.DB_USER,
+            password=settings.DB_PASSWORD,
+            host=settings.DB_HOST,
+            port=settings.DB_PORT,
+            name=settings.DB_NAME,
         ),
     )

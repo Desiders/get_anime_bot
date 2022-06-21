@@ -12,7 +12,7 @@ config = context.config
 config.set_main_option(
     "sqlalchemy.url",
     make_connection_string(
-        load_config("config.ini").database,
+        load_config().database,
         async_fallback=True,
     ),
 )
