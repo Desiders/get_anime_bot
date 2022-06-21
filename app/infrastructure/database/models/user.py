@@ -19,7 +19,6 @@ class UserModel(Base):
         "ViewModel",
         cascade="all, delete-orphan",
         uselist=False,
-        back_populates="users",
     )
 
     created = Column(
