@@ -1,0 +1,84 @@
+# Translations template for PROJECT.
+# Copyright (C) 2022 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2022-06-21 12:54+0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.9.1\n"
+
+#: app/dialogs/settings.py:20
+msgid "Allow nsfw"
+msgstr ""
+
+#: app/dialogs/settings.py:21
+msgid "Forbid nsfw"
+msgstr ""
+
+#: app/dialogs/settings.py:24
+msgid "Hide nsfw"
+msgstr ""
+
+#: app/dialogs/settings.py:25
+msgid "Show nsfw"
+msgstr ""
+
+#: app/handlers/errors.py:19
+msgid ""
+"It looks like this message belongs to another person or something went "
+"wrong. Try again!"
+msgstr ""
+
+#: app/handlers/introduction.py:17
+msgid ""
+"Hello, {first_name}!\n"
+"\n"
+"Get an anime GIF or image by genre!\n"
+"/genres_gif\n"
+"/genres_img\n"
+"/genres_all (can return gif and image)\n"
+"\n"
+"/language — change language\n"
+"/settings — change settings"
+msgstr ""
+
+#: app/handlers/introduction.py:56 app/handlers/introduction.py:99
+#: app/handlers/introduction.py:142
+msgid ""
+"Available genres:\n"
+"\n"
+"{genres}"
+msgstr ""
+
+#: app/handlers/introduction.py:168
+msgid ""
+"Bot has open source code!\n"
+"\n"
+"Source: {link}"
+msgstr ""
+
+#: app/handlers/media.py:43
+msgid "No media found for this genre :("
+msgstr ""
+
+#: app/handlers/media.py:107
+msgid ""
+"You aren't allowed to see nsfw content!\n"
+"\n"
+"/settings — change settings"
+msgstr ""
+
+#: app/handlers/media.py:119
+msgid "You can't see nsfw content not in private messages! ^_^"
+msgstr ""
+
