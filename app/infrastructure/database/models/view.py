@@ -1,7 +1,7 @@
 from datetime import datetime
 
 from app.infrastructure.database import Base
-from sqlalchemy import Column, DateTime, ForeignKey, Integer
+from sqlalchemy import BigInteger, Column, DateTime, ForeignKey, Integer
 
 
 class ViewModel(Base):
@@ -10,7 +10,7 @@ class ViewModel(Base):
     id = Column(Integer, primary_key=True)
 
     user_tg_id = Column(
-        Integer,
+        BigInteger,
         ForeignKey(
             column="users.tg_id",
             onupdate="CASCADE",
