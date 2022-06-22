@@ -2,8 +2,7 @@ import html
 from itertools import chain
 
 from aiogram import Dispatcher
-from aiogram.types import (KeyboardButton, Message, ReplyKeyboardMarkup,
-                           ReplyKeyboardRemove)
+from aiogram.types import Message, ReplyKeyboardRemove
 from aiogram_dialog import DialogManager, StartMode
 from app.dialogs import Language, Settings
 from app.infrastructure.database.models import UserModel
@@ -59,22 +58,11 @@ async def genres_gif_cmd(
         genres=" ".join(map(lambda string: "/" + string, genres)),
     )
 
-    markup = ReplyKeyboardMarkup(
-        resize_keyboard=True,
-        one_time_keyboard=True,
-        selective=True,
-        row_width=1,
-        keyboard=[
-            [KeyboardButton(text="/help")],
-        ],
-    )
-
     await m.answer(
         text=text,
         parse_mode="HTML",
         disable_web_page_preview=True,
         disable_notification=False,
-        reply_markup=markup,
     )
 
 
@@ -102,22 +90,11 @@ async def genres_img_cmd(
         genres=" ".join(map(lambda string: "/" + string, genres)),
     )
 
-    markup = ReplyKeyboardMarkup(
-        resize_keyboard=True,
-        one_time_keyboard=True,
-        selective=True,
-        row_width=1,
-        keyboard=[
-            [KeyboardButton(text="/help")],
-        ],
-    )
-
     await m.answer(
         text=text,
         parse_mode="HTML",
         disable_web_page_preview=True,
         disable_notification=False,
-        reply_markup=markup,
     )
 
 
@@ -145,22 +122,11 @@ async def genres_all_cmd(
         genres=" ".join(map(lambda string: "/" + string, genres)),
     )
 
-    markup = ReplyKeyboardMarkup(
-        resize_keyboard=True,
-        one_time_keyboard=True,
-        selective=True,
-        row_width=1,
-        keyboard=[
-            [KeyboardButton(text="/help")],
-        ],
-    )
-
     await m.answer(
         text=text,
         parse_mode="HTML",
         disable_web_page_preview=True,
         disable_notification=False,
-        reply_markup=markup,
     )
 
 
@@ -174,38 +140,19 @@ async def source_cmd(m: Message, _: I18nGettext):
         )
     )
 
-    markup = ReplyKeyboardMarkup(
-        resize_keyboard=True,
-        one_time_keyboard=True,
-        selective=True,
-        row_width=1,
-        keyboard=[
-            [KeyboardButton(text="/help")],
-        ],
-    )
-
     await m.answer(
         text=text,
         parse_mode="HTML",
         disable_web_page_preview=True,
         disable_notification=False,
-        reply_markup=markup,
     )
 
 
-async def language_cmd(
-    m: Message,
-    _: I18nGettext,
-    dialog_manager: DialogManager,
-):
+async def language_cmd(m: Message, dialog_manager: DialogManager):
     await dialog_manager.start(Language.main, mode=StartMode.RESET_STACK)
 
 
-async def settings_cmd(
-    m: Message,
-    _: I18nGettext,
-    dialog_manager: DialogManager,
-):
+async def settings_cmd(m: Message, dialog_manager: DialogManager):
     await dialog_manager.start(Settings.main, mode=StartMode.RESET_STACK)
 
 

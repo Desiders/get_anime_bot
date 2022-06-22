@@ -2,7 +2,7 @@ from itertools import chain
 from typing import Optional
 
 from aiogram import Dispatcher
-from aiogram.types import KeyboardButton, Message, ReplyKeyboardMarkup
+from aiogram.types import Message
 from aiogram.utils.exceptions import FileIsTooBig, WrongFileIdentifier
 from aiohttp import ClientError
 from app.filters import CheckGenreIn, NSFWSettings
@@ -22,10 +22,7 @@ async def genre_cmd(
     sources: set[MediaSource],
     uow: UnitOfWork,
 ):
-    command, *bot_mention = m.text.split("@")
-
-    # escape `/` before the genre
-    genre = command[1:]
+    genre = m.get_command(pure=True)
 
     media: Optional[Media] = None
     for source in sources:
@@ -51,16 +48,6 @@ async def genre_cmd(
         )
         return
 
-    markup = ReplyKeyboardMarkup(
-        resize_keyboard=True,
-        one_time_keyboard=True,
-        selective=True,
-        row_width=1,
-        keyboard=[
-            [KeyboardButton(text=command)],
-        ],
-    )
-
     try:
         if media.media_type == "gif":
             await m.reply_animation(
@@ -68,7 +55,6 @@ async def genre_cmd(
                 parse_mode=None,
                 disable_notification=False,
                 allow_sending_without_reply=True,
-                reply_markup=markup,
             )
         else:
             await m.reply_document(
@@ -76,7 +62,6 @@ async def genre_cmd(
                 parse_mode=None,
                 disable_notification=False,
                 allow_sending_without_reply=True,
-                reply_markup=markup,
             )
     except WrongFileIdentifier:
         logger.warning("Failed to send media", media=media)
