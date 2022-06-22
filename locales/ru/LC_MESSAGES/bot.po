@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2022-06-21 12:54+0300\n"
-"PO-Revision-Date: 2022-06-21 12:59+0300\n"
+"POT-Creation-Date: 2022-06-22 21:39+0300\n"
+"PO-Revision-Date: 2022-06-22 21:42+0300\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: ru\n"
@@ -20,21 +20,25 @@ msgstr ""
 "Generated-By: Babel 2.9.1\n"
 "X-Generator: Poedit 3.1\n"
 
-#: app/dialogs/settings.py:20
-msgid "Allow nsfw"
-msgstr "Разрешить nsfw"
+#: app/dialogs/language.py:25
+msgid "Select a language:"
+msgstr "Выберите язык:"
 
-#: app/dialogs/settings.py:21
-msgid "Forbid nsfw"
-msgstr "Запретить nsfw"
+#: app/dialogs/language.py:26 app/dialogs/settings.py:24
+msgid "Finish dialog"
+msgstr "Завершить диалог"
 
-#: app/dialogs/settings.py:24
-msgid "Hide nsfw"
-msgstr "Скрыть nsfw"
-
-#: app/dialogs/settings.py:25
+#: app/dialogs/settings.py:19
 msgid "Show nsfw"
-msgstr "Показать nsfw"
+msgstr "Показывать nsfw"
+
+#: app/dialogs/settings.py:20
+msgid "Hide nsfw"
+msgstr "Скрывать nsfw"
+
+#: app/dialogs/settings.py:23
+msgid "Choose your settings:"
+msgstr "Выберите настройки:"
 
 #: app/handlers/errors.py:19
 msgid ""
@@ -44,7 +48,7 @@ msgstr ""
 "Похоже, что это сообщение принадлежит другому человеку или что-то "
 "пошло не так. Попробуйте еще раз!"
 
-#: app/handlers/introduction.py:17
+#: app/handlers/introduction.py:16
 msgid ""
 "Hello, {first_name}!\n"
 "\n"
@@ -66,8 +70,8 @@ msgstr ""
 "/language - сменить язык\n"
 "/settings - изменение настроек"
 
-#: app/handlers/introduction.py:56 app/handlers/introduction.py:99
-#: app/handlers/introduction.py:142
+#: app/handlers/introduction.py:55 app/handlers/introduction.py:87
+#: app/handlers/introduction.py:119
 msgid ""
 "Available genres:\n"
 "\n"
@@ -77,7 +81,7 @@ msgstr ""
 "\n"
 "{genres}"
 
-#: app/handlers/introduction.py:168
+#: app/handlers/introduction.py:134
 msgid ""
 "Bot has open source code!\n"
 "\n"
@@ -87,11 +91,11 @@ msgstr ""
 "\n"
 "Источник: {link}"
 
-#: app/handlers/media.py:43
+#: app/handlers/media.py:44
 msgid "No media found for this genre :("
 msgstr "Не найдено медиафайла для этого жанра :("
 
-#: app/handlers/media.py:107
+#: app/handlers/media.py:101
 msgid ""
 "You aren't allowed to see nsfw content!\n"
 "\n"
@@ -101,7 +105,7 @@ msgstr ""
 "\n"
 "/settings — изменение настроек"
 
-#: app/handlers/media.py:119
+#: app/handlers/media.py:113
 msgid "You can't see nsfw content not in private messages! ^_^"
 msgstr ""
 "Ты не можешь просматривать nsfw-контент не в приватных сообщениях! ^_^"

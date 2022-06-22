@@ -4,27 +4,31 @@ from aiogram.dispatcher.filters.state import State, StatesGroup
 from aiogram.types import CallbackQuery
 from aiogram_dialog import Dialog, DialogManager, Window
 from aiogram_dialog.manager.protocols import LaunchMode
-from aiogram_dialog.widgets.kbd import Radio
+from aiogram_dialog.widgets.kbd import Button, Column, Radio
 from aiogram_dialog.widgets.text import Const, Format
 from app.infrastructure.database.repositories.uow import UnitOfWork
 from app.middlewares import I18nMiddleware
+from app.typehints import I18nGettext
 from app.utils.language import AVAILABLE_LANGUAGES
 
 
 class Language(StatesGroup):
     main = State()
-    select = State()
 
 
-async def get_data(**kwargs):
+async def get_data(_: I18nGettext, **kwargs):
     languages = [
         (lang.label, lang.code)
         for lang in AVAILABLE_LANGUAGES.values()
     ]
 
+    select_language_text = _("Select a language:")
+    finish_dialog_text = _("Finish dialog")
+
     return {
         "languages": languages,
-        "count": len(languages),
+        "select_language_text": select_language_text,
+        "finish_dialog_text": finish_dialog_text,
     }
 
 
@@ -51,9 +55,19 @@ async def select_language(
     await c.answer()
 
 
+async def finish_dialog(
+    c: CallbackQuery,
+    button: Button,
+    manager: DialogManager,
+):
+    await c.message.delete()
+    await manager.done()
+
+
 dialog = Dialog(
     Window(
-        Const("Select a language:"),
+        # "Select a language:"
+        Format("{select_language_text}"),
         Radio(
             checked_text=Format("✓ {item[0]}"),
             unchecked_text=Format("{item[0]}"),
@@ -61,6 +75,14 @@ dialog = Dialog(
             item_id_getter=operator.itemgetter(1),
             items="languages",
             on_click=select_language,
+        ),
+        Column(
+            Button(
+                # "Finish dialog"
+                text=Format("{finish_dialog_text}"),
+                id="finish",
+                on_click=finish_dialog,
+            ),
         ),
         state=Language.main,
         getter=get_data,
