@@ -1,8 +1,8 @@
 """create tables
 
-Revision ID: bb5fefd450f1
+Revision ID: c410d49a8acb
 Revises: 
-Create Date: 2022-06-19 01:55:07.925612
+Create Date: 2022-06-22 13:21:36.554347
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'bb5fefd450f1'
+revision = 'c410d49a8acb'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -31,8 +31,7 @@ def upgrade() -> None:
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('tg_id', sa.Integer(), nullable=False),
     sa.Column('language_code', sa.String(), nullable=True),
-    sa.Column('can_check_nsfw', sa.Boolean(), nullable=False),
-    sa.Column('hide_nsfw', sa.Boolean(), nullable=False),
+    sa.Column('show_nsfw', sa.Boolean(), nullable=False),
     sa.Column('created', sa.DateTime(), nullable=False),
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('tg_id')
@@ -43,9 +42,9 @@ def upgrade() -> None:
     sa.Column('genre', sa.String(), nullable=True),
     sa.Column('media_type', sa.String(), nullable=False),
     sa.Column('is_sfw', sa.Boolean(), nullable=True),
-    sa.Column('source', sa.Integer(), nullable=True),
+    sa.Column('source_id', sa.Integer(), nullable=True),
     sa.Column('created', sa.DateTime(), nullable=False),
-    sa.ForeignKeyConstraint(['source'], ['sources.id'], onupdate='CASCADE', ondelete='SET NULL'),
+    sa.ForeignKeyConstraint(['source_id'], ['sources.id'], onupdate='CASCADE', ondelete='SET NULL'),
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('url', 'genre', 'media_type')
     )

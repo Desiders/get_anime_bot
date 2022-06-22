@@ -3,7 +3,8 @@ README.md
 
 .gitignore
 
-config_example.ini
+.env_example
+
 mypy.ini
 tox.ini
 

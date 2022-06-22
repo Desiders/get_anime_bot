@@ -1,4 +1,4 @@
-from pydantic import BaseSettings, validator
+from pydantic import BaseSettings
 
 
 class Bot(BaseSettings):
