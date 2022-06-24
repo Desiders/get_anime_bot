@@ -2,7 +2,7 @@ from itertools import chain
 from typing import Optional
 
 from aiogram import Dispatcher
-from aiogram.types import Message
+from aiogram.types import KeyboardButton, Message, ReplyKeyboardMarkup
 from aiogram.utils.exceptions import FileIsTooBig, WrongFileIdentifier
 from aiohttp import ClientError
 from app.filters import CheckGenreIn, NSFWSettings
@@ -48,6 +48,19 @@ async def genre_cmd(
         )
         return
 
+    if m.chat.type == "private":
+        markup = ReplyKeyboardMarkup(
+            resize_keyboard=True,
+            one_time_keyboard=False,
+            row_width=1,
+            keyboard=[
+                [KeyboardButton(text=f"/{genre}")],
+                [KeyboardButton(text="/help")],
+            ],
+        )
+    else:
+        markup = None
+
     try:
         if media.media_type == "gif":
             await m.reply_animation(
@@ -55,6 +68,7 @@ async def genre_cmd(
                 parse_mode=None,
                 disable_notification=False,
                 allow_sending_without_reply=True,
+                reply_markup=markup,
             )
         else:
             await m.reply_document(
@@ -62,6 +76,7 @@ async def genre_cmd(
                 parse_mode=None,
                 disable_notification=False,
                 allow_sending_without_reply=True,
+                reply_markup=markup,
             )
     except WrongFileIdentifier:
         logger.warning("Failed to send media", media=media)

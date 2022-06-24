@@ -95,29 +95,35 @@ async def main():
 
 
 async def set_bot_commands(bot: Bot):
+    cmd_help = BotCommand(
+        command="help",
+        description="Show menu",
+    )
+    cmd_gif = BotCommand(
+        command="genres_gif",
+        description="GIF by genre",
+    )
+    cmd_img = BotCommand(
+        command="genres_img",
+        description="image by genre",
+    )
+    cmd_all = BotCommand(
+        command="genres_all",
+        description=" GIF or image by genre",
+    )
+    cmd_source = BotCommand(
+        command="source",
+        description="Show source code",
+    )
+
     public = [
-        BotCommand(
-            command="help",
-            description="Show menu",
-        ),
+        cmd_help, cmd_gif,
+        cmd_img,cmd_all,
     ]
     private = [
-        BotCommand(
-            command="help",
-            description="Show menu",
-        ),
-        BotCommand(
-            command="language",
-            description="Change language",
-        ),
-        BotCommand(
-            command="settings",
-            description="Show settings",
-        ),
-        BotCommand(
-            command="source",
-            description="Show source code",
-        ),
+        cmd_help, cmd_gif,
+        cmd_img, cmd_all,
+        cmd_source,
     ]
 
     await bot.set_my_commands(public, BotCommandScopeAllGroupChats())

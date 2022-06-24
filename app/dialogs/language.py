@@ -5,7 +5,7 @@ from aiogram.types import CallbackQuery
 from aiogram_dialog import Dialog, DialogManager, Window
 from aiogram_dialog.manager.protocols import LaunchMode
 from aiogram_dialog.widgets.kbd import Button, Column, Radio
-from aiogram_dialog.widgets.text import Const, Format
+from aiogram_dialog.widgets.text import Format
 from app.infrastructure.database.repositories.uow import UnitOfWork
 from app.middlewares import I18nMiddleware
 from app.typehints import I18nGettext

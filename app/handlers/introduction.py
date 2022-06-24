@@ -63,6 +63,7 @@ async def genres_gif_cmd(
         parse_mode="HTML",
         disable_web_page_preview=True,
         disable_notification=False,
+        reply_markup=ReplyKeyboardRemove(),
     )
 
 
@@ -95,6 +96,7 @@ async def genres_img_cmd(
         parse_mode="HTML",
         disable_web_page_preview=True,
         disable_notification=False,
+        reply_markup=ReplyKeyboardRemove(),
     )
 
 
@@ -127,6 +129,7 @@ async def genres_all_cmd(
         parse_mode="HTML",
         disable_web_page_preview=True,
         disable_notification=False,
+        reply_markup=ReplyKeyboardRemove(),
     )
 
 
@@ -145,6 +148,7 @@ async def source_cmd(m: Message, _: I18nGettext):
         parse_mode="HTML",
         disable_web_page_preview=True,
         disable_notification=False,
+        reply_markup=ReplyKeyboardRemove(),
     )
 
 
