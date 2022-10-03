@@ -1,6 +1,6 @@
 from logging.config import fileConfig
 
-from app.config import load_config
+from app.config_reader import load_config
 from app.infrastructure.database import make_connection_string
 from app.infrastructure.database.models import Base
 from sqlalchemy import engine_from_config, pool

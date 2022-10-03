@@ -1,20 +1,18 @@
-from typing import Optional, Union
-
 from aiogram.contrib.middlewares.i18n import \
     I18nMiddleware as BaseI18nMiddleware
 from aiogram.types import CallbackQuery, Message
 from app.infrastructure.database.models import UserModel
 from app.infrastructure.database.repositories.uow import UnitOfWork
-from app.utils.language import get_locale_or_default
+from app.language_utils.language import get_locale_or_default
 
 
 class I18nMiddleware(BaseI18nMiddleware):
-    async def get_user_locale(self, action, args: tuple) -> Optional[str]:
-        obj: Union[CallbackQuery, Message]
+    async def get_user_locale(self, action, args: tuple) -> str | None:
+        obj: CallbackQuery | Message
         data: dict
         obj, *_, data = args
 
-        user: Optional[UserModel] = data.get("user")
+        user: UserModel | None = data.get("user")
         if user is None:
             return None
 

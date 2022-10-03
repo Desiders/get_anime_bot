@@ -1,5 +1,3 @@
-from typing import Optional
-
 from app.infrastructure.database.models import MediaModel, ViewModel
 from app.infrastructure.database.repositories.repo import Repo
 from sqlalchemy import and_, func, insert, select
@@ -76,7 +74,7 @@ class MediaRepo(Repo):
         source_id: int,
         media_type: str,
         is_sfw: bool,
-        genre: Optional[str] = None,
+        genre: str | None = None,
     ):
         await self.session.execute(
             insert(MediaModel)

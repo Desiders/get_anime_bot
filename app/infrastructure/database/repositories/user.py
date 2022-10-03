@@ -1,5 +1,3 @@
-from typing import Optional
-
 from app.infrastructure.database.models import UserModel
 from app.infrastructure.database.repositories.repo import Repo
 from sqlalchemy import insert, select, update
@@ -17,7 +15,7 @@ class UserRepo(Repo):
     async def create(
         self,
         tg_id: int,
-        language_code: Optional[str] = None,
+        language_code: str | None = None,
     ):
         await self.session.execute(
             insert(UserModel)

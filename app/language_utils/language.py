@@ -1,5 +1,4 @@
 from dataclasses import dataclass, field
-from typing import Optional
 
 
 @dataclass
@@ -7,7 +6,7 @@ class LanguageData:
     code: str
     flag: str
     title: str
-    label: Optional[str] = field(init=False, default=None)
+    label: str | None = field(init=False, default=None)
 
     def __post_init__(self):
         self.label = f"{self.flag} {self.title}"
@@ -28,7 +27,7 @@ AVAILABLE_LANGUAGES = {
 }
 
 
-def get_locale_or_default(locale: Optional[str] = None) -> str:
+def get_locale_or_default(locale: str | None = None) -> str:
     if not locale:
         return DEFAULT_LANGUAGE.code
 

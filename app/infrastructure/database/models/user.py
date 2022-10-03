@@ -2,7 +2,6 @@ from datetime import datetime
 
 from app.infrastructure.database import Base
 from sqlalchemy import BigInteger, Boolean, Column, DateTime, Integer, String
-from sqlalchemy.orm import relationship
 
 
 class UserModel(Base):
@@ -13,13 +12,6 @@ class UserModel(Base):
 
     language_code = Column(String, nullable=True)
     show_nsfw = Column(Boolean, default=False, nullable=False)
-
-    # TODO: add views media for user
-    views = relationship(
-        "ViewModel",
-        cascade="all, delete-orphan",
-        uselist=False,
-    )
 
     created = Column(
         DateTime,

@@ -1,4 +1,4 @@
-from app.config import Database
+from app.config_reader import Database
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.orm import sessionmaker
 
@@ -22,7 +22,7 @@ def sa_sessionmaker(
     echo: bool = False,
 ) -> sessionmaker:
     return sessionmaker(
-        bind=create_async_engine(connection_string, echo=echo, pool_size=20),
+        bind=create_async_engine(connection_string, echo=echo, pool_size=100),
         expire_on_commit=False, class_=AsyncSession,
-        future=True, autoflush=False,
+        future=True, autoflush=False, autocommit=False,
     )

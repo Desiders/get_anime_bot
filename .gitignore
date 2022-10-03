@@ -2,9 +2,12 @@ __pycache__/
 
 *.mo
 
-.venv
+.venv/
 venv/
 
+.vscode/
+
 .env
+.env.dev
 
 .mypy_cache/

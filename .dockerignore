@@ -1,12 +1,28 @@
+LICENSE
 LICENCE
 README.md
 
 .gitignore
+.gitattributes
 
-.env_example
+*.mo
+
+.env
+.env.dev
+.env.dev.example
+.env.example
+
+.vscode/
+
+__pycache__/
+.mypy_cache/
+
+.venv/
+venv/
 
 mypy.ini
 tox.ini
+alembic.ini
 
 requirements-dev.txt
 

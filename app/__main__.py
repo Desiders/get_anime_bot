@@ -9,18 +9,54 @@ from aiogram_dialog import DialogRegistry
 from structlog import get_logger
 from structlog.stdlib import BoundLogger
 
-from app.config import load_config
+from app.config_reader import load_config
 from app.constants import LOCALES_DIR
 from app.dialogs import language_dialog, settings_dialog
 from app.handlers import (register_error_handlers, register_genre_handlers,
                           register_introduction_handlers)
 from app.infrastructure.database import make_connection_string, sa_sessionmaker
 from app.infrastructure.media import NekosFun, NekosLife, WaifuPics
-from app.logging import logging_configure
+from app.language_utils.language import DEFAULT_LANGUAGE
+from app.logging_config import logging_configure
 from app.middlewares import ACLMiddleware, DatabaseMiddleware, I18nMiddleware
-from app.utils.language import DEFAULT_LANGUAGE
 
 logger: BoundLogger = get_logger()
+
+
+async def set_bot_commands(bot: Bot):
+    cmd_help = BotCommand(
+        command="help",
+        description="Show menu",
+    )
+    cmd_gif = BotCommand(
+        command="genres_gif",
+        description="GIF by genre",
+    )
+    cmd_img = BotCommand(
+        command="genres_img",
+        description="image by genre",
+    )
+    cmd_all = BotCommand(
+        command="genres_all",
+        description=" GIF or image by genre",
+    )
+    cmd_source = BotCommand(
+        command="source",
+        description="Show source code",
+    )
+
+    public = [
+        cmd_help, cmd_gif,
+        cmd_img, cmd_all,
+    ]
+    private = [
+        cmd_help, cmd_gif,
+        cmd_img, cmd_all,
+        cmd_source,
+    ]
+
+    await bot.set_my_commands(public, BotCommandScopeAllGroupChats())
+    await bot.set_my_commands(private, BotCommandScopeAllPrivateChats())
 
 
 async def main():
@@ -72,7 +108,7 @@ async def main():
     logger.info("Dialogs are registered")
 
     try:
-        logger.warning("Bot starting!")
+        logger.info("Bot starting!")
         await dp.start_polling(
             allowed_updates=[
                 "message_handlers", "callback_query_handlers",
@@ -90,44 +126,6 @@ async def main():
         await nekos_fun.close()
         await waifu_pics.close()
         logger.warning("Closed sources")
-
-        logger.warning("Bye")
-
-
-async def set_bot_commands(bot: Bot):
-    cmd_help = BotCommand(
-        command="help",
-        description="Show menu",
-    )
-    cmd_gif = BotCommand(
-        command="genres_gif",
-        description="GIF by genre",
-    )
-    cmd_img = BotCommand(
-        command="genres_img",
-        description="image by genre",
-    )
-    cmd_all = BotCommand(
-        command="genres_all",
-        description=" GIF or image by genre",
-    )
-    cmd_source = BotCommand(
-        command="source",
-        description="Show source code",
-    )
-
-    public = [
-        cmd_help, cmd_gif,
-        cmd_img,cmd_all,
-    ]
-    private = [
-        cmd_help, cmd_gif,
-        cmd_img, cmd_all,
-        cmd_source,
-    ]
-
-    await bot.set_my_commands(public, BotCommandScopeAllGroupChats())
-    await bot.set_my_commands(private, BotCommandScopeAllPrivateChats())
 
 
 asyncio.run(main())

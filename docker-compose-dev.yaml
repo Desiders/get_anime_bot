@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
     bot:
-        container_name: get_anime_bot
+        container_name: get_anime_bot_dev
         build:
             context: .
             dockerfile: Dockerfile
@@ -18,9 +18,9 @@ services:
         depends_on:
             - db
         networks:
-            - backend
+            - backend_dev
     db:
-        container_name: get_anime_bot_db
+        container_name: get_anime_bot_db_dev
         image: postgres:14-alpine
         restart: on-failure
         environment:
@@ -32,12 +32,12 @@ services:
         ports:
             - 5432:5432
         networks:
-            - backend
+            - backend_dev
 
 volumes:
     postgres-data:
 
 networks:
-    backend:
-        name: get_anime_bot_backend
+    backend_dev:
+        name: get_anime_bot_backend_dev
         driver: bridge

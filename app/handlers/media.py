@@ -1,5 +1,4 @@
 from itertools import chain
-from typing import Optional
 
 from aiogram import Dispatcher
 from aiogram.types import KeyboardButton, Message, ReplyKeyboardMarkup
@@ -24,20 +23,22 @@ async def genre_cmd(
 ):
     genre = m.get_command(pure=True)
 
-    media: Optional[Media] = None
+    media: Media | None = None
     for source in sources:
-        if genre in source.genres:
-            try:
-                media_many = await source.get_media(genre, count=1)
-            except ClientError:
-                logger.warning(
-                    "Failed to get media",
-                    exc_info=True,
-                    stack_info=True,
-                )
-            else:
-                media = media_many[0]
-            break
+        if genre not in source.genres:
+            continue
+
+        try:
+            media_many = await source.get_media(genre, count=1)
+        except ClientError:
+            logger.warning(
+                "Failed to get media",
+                exc_info=True,
+                stack_info=True,
+            )
+        else:
+            media = media_many[0]
+        break
 
     if media is None:
         await m.reply(
@@ -80,10 +81,12 @@ async def genre_cmd(
             )
     except WrongFileIdentifier:
         logger.warning("Failed to send media", media=media)
+
         await genre_cmd(m, _, sources, uow)
         return
     except FileIsTooBig:
         logger.warning("Failed to send media. File is too big", media=media)
+
         await genre_cmd(m, _, sources, uow)
 
     source_name = source.__class__.__name__

@@ -1,5 +1,3 @@
-from typing import Union
-
 from aiogram.dispatcher.middlewares import BaseMiddleware
 from aiogram.types import CallbackQuery, Message
 from app.infrastructure.database.repositories import UnitOfWork
@@ -23,7 +21,7 @@ class ACLMiddleware(BaseMiddleware):
 
     async def create_user(
         self,
-        obj: Union[CallbackQuery, Message],
+        obj: CallbackQuery | Message,
         data: dict,
     ):
         uow: UnitOfWork = data["uow"]

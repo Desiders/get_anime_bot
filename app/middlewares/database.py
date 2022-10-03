@@ -1,5 +1,3 @@
-from typing import Union
-
 from aiogram.dispatcher.middlewares import LifetimeControllerMiddleware
 from aiogram.types import CallbackQuery, Message
 from app.infrastructure.database.repositories import UnitOfWork
@@ -19,7 +17,7 @@ class DatabaseMiddleware(LifetimeControllerMiddleware):
 
     async def setup_uow(
         self,
-        obj: Union[Message, CallbackQuery],
+        obj: Message | CallbackQuery,
         data: dict,
     ):
         async with self.sa_sessionmaker() as session:

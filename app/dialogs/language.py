@@ -7,9 +7,9 @@ from aiogram_dialog.manager.protocols import LaunchMode
 from aiogram_dialog.widgets.kbd import Button, Column, Radio
 from aiogram_dialog.widgets.text import Format
 from app.infrastructure.database.repositories.uow import UnitOfWork
+from app.language_utils.language import AVAILABLE_LANGUAGES
 from app.middlewares import I18nMiddleware
 from app.typehints import I18nGettext
-from app.utils.language import AVAILABLE_LANGUAGES
 
 
 class Language(StatesGroup):

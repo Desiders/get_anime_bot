@@ -1,5 +1,3 @@
-from typing import Optional
-
 from app.infrastructure.database.repositories.media import MediaRepo
 from app.infrastructure.database.repositories.source import SourceRepo
 from app.infrastructure.database.repositories.user import UserRepo
@@ -11,10 +9,10 @@ class UnitOfWork:
     def __init__(self, session: AsyncSession):
         self.session = session
 
-        self._media_repo: Optional[MediaRepo] = None
-        self._source_repo: Optional[SourceRepo] = None
-        self._user_repo: Optional[UserRepo] = None
-        self._views_repo: Optional[ViewsRepo] = None
+        self._media_repo: MediaRepo | None = None
+        self._source_repo: SourceRepo | None = None
+        self._user_repo: UserRepo | None = None
+        self._views_repo: ViewsRepo | None = None
 
     @property
     def media(self):

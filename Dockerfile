@@ -1,4 +1,4 @@
-FROM python:3.9-slim-buster as compile-image
+FROM python:3.10.6-slim-buster as compile-image
 
 ENV PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1 \
@@ -9,10 +9,10 @@ ENV PYTHONUNBUFFERED=1 \
 RUN python -m venv /opt/venv
 ENV PATH="/opt/venv/bin:$PATH"
 COPY requirements.txt .
-RUN pip install --no-cache-dir --upgrade pip \
+RUN pip install --no-cache-dir -r requirements.txt \
  && pip install --no-cache-dir -r requirements.txt
 
-FROM python:3.9-slim-buster
+FROM python:3.10.6-slim-buster
 COPY --from=compile-image /opt/venv /opt/venv
 ENV PATH="/opt/venv/bin:$PATH"
 WORKDIR /app
