@@ -3,12 +3,12 @@ from itertools import chain
 from aiogram import Dispatcher
 from aiogram.types import KeyboardButton, Message, ReplyKeyboardMarkup
 from aiogram.utils.exceptions import FileIsTooBig, WrongFileIdentifier
-from aiohttp import ClientError
 from app.filters import CheckGenreIn, NSFWSettings
 from app.infrastructure.database.repositories import UnitOfWork
-from app.infrastructure.media import Media, MediaSource
+from app.infrastructure.media import MediaSource
+from app.infrastructure.media.base.schemas import MediaGenre
 from app.typehints import I18nGettext
-from sqlalchemy.exc import IntegrityError, NoResultFound
+from sqlalchemy.exc import IntegrityError
 from structlog import get_logger
 from structlog.stdlib import BoundLogger
 
@@ -21,33 +21,36 @@ async def genre_cmd(
     sources: set[MediaSource],
     uow: UnitOfWork,
 ):
-    genre = m.get_command(pure=True)
+    genre: str = m.get_command(pure=True)
 
-    media: Media | None = None
+    media_genre: MediaGenre
     for source in sources:
         if genre not in source.genres:
             continue
 
-        try:
-            media_many = await source.get_media(genre, count=1)
-        except ClientError:
-            logger.warning(
-                "Failed to get media",
-                exc_info=True,
-                stack_info=True,
-            )
-        else:
-            media = media_many[0]
-        break
+        media_genre = source.parse_genre(genre)
 
-    if media is None:
+    media_many = await uow.media.get_not_viewed(
+        tg_id=m.from_user.id,
+        genre=media_genre.raw_genre,
+        media_type=media_genre.media_type,
+        is_sfw=media_genre.is_sfw,
+        limit=5,
+    )
+
+    if not media_many:
         await m.reply(
-            text=_("No media found for this genre :("),
+            text=_(
+                "Not viewed media not found for this genre to you :(\n"
+                "Try again later, please!",
+            ),
             parse_mode="HTML",
             disable_web_page_preview=True,
             disable_notification=False,
         )
         return
+    else:
+        media = media_many[0]
 
     if m.chat.type == "private":
         markup = ReplyKeyboardMarkup(
@@ -89,27 +92,13 @@ async def genre_cmd(
 
         await genre_cmd(m, _, sources, uow)
 
-    source_name = source.__class__.__name__
     try:
-        source_model = await uow.sources.get_by_name(source_name)
-    except NoResultFound:
-        # save the source to the database
-        await uow.sources.create(source_name, source.SOURCE_URL)
-        await uow.commit()
-
-        source_model = await uow.sources.get_by_name(source_name)
-
-    try:
-        # save the media to the database
-        await uow.media.create(
-            url=media.url,
-            source_id=source_model.id,
-            media_type=media.media_type,
-            is_sfw=media.is_sfw,
-            genre=media.raw_genre,
+        await uow.views.create(
+            tg_id=m.from_user.id,
+            media_id=media.id,
         )
     except IntegrityError:
-        pass
+        await uow.rollback()
     else:
         await uow.commit()
 

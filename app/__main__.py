@@ -6,6 +6,7 @@ from aiogram.contrib.middlewares.environment import EnvironmentMiddleware
 from aiogram.types import (BotCommand, BotCommandScopeAllGroupChats,
                            BotCommandScopeAllPrivateChats)
 from aiogram_dialog import DialogRegistry
+from sqlalchemy.orm import sessionmaker
 from structlog import get_logger
 from structlog.stdlib import BoundLogger
 
@@ -15,7 +16,9 @@ from app.dialogs import language_dialog, settings_dialog
 from app.handlers import (register_error_handlers, register_genre_handlers,
                           register_introduction_handlers)
 from app.infrastructure.database import make_connection_string, sa_sessionmaker
-from app.infrastructure.media import NekosFun, NekosLife, WaifuPics
+from app.infrastructure.media import (MediaSource, NekosFun, NekosLife,
+                                      WaifuPics)
+from app.infrastructure.scheduler import start_parse_media
 from app.language_utils.language import DEFAULT_LANGUAGE
 from app.logging_config import logging_configure
 from app.middlewares import ACLMiddleware, DatabaseMiddleware, I18nMiddleware
@@ -59,6 +62,13 @@ async def set_bot_commands(bot: Bot):
     await bot.set_my_commands(private, BotCommandScopeAllPrivateChats())
 
 
+async def start_scheduler(
+    sources: set[MediaSource],
+    sa_sessionmaker: sessionmaker,
+):
+    await start_parse_media(sources, sa_sessionmaker)
+
+
 async def main():
     logging_configure()
     logger.info("Logging is configured")
@@ -83,9 +93,9 @@ async def main():
     await set_bot_commands(bot)
     logger.info("Bot commands are set")
 
-    dp.setup_middleware(DatabaseMiddleware(
-        sa_sessionmaker(make_connection_string(config.database)),
-    ))
+    sm = sa_sessionmaker(make_connection_string(config.database))
+
+    dp.setup_middleware(DatabaseMiddleware(sm))
     dp.setup_middleware(ACLMiddleware())
     dp.setup_middleware(I18nMiddleware(
         domain="bot",
@@ -106,6 +116,9 @@ async def main():
     registry.register(language_dialog)
     registry.register(settings_dialog)
     logger.info("Dialogs are registered")
+
+    await start_scheduler({nekos_life, nekos_fun, waifu_pics}, sm)
+    logger.info("Scheduler is started")
 
     try:
         logger.info("Bot starting!")

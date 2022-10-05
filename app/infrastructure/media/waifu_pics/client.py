@@ -63,7 +63,10 @@ class WaifuPics(MediaSource):
         else:
             url = self.generate_nsfw_url(genre_model, many)
 
-        response = await self.session.get(url=url)
+        if many:
+            response = await self.session.post(url=url, json={"exclude": []})
+        else:
+            response = await self.session.get(url=url)
         response.raise_for_status()
 
         result = await response.json()

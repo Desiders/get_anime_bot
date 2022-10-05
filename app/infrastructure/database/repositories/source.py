@@ -20,14 +20,6 @@ class SourceRepo(Repo):
 
         return result.scalar_one()
 
-    async def get_by_url(self, url: str) -> SourceModel:
-        result = await self.session.execute(
-            select(SourceModel)
-            .where(SourceModel.url == url)
-        )
-
-        return result.scalar_one()
-
     async def create(self, name: str, url: str):
         await self.session.execute(
             insert(SourceModel)

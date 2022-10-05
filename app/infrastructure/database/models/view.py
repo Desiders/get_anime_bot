@@ -1,7 +1,8 @@
 from datetime import datetime
 
 from app.infrastructure.database import Base
-from sqlalchemy import BigInteger, Column, DateTime, ForeignKey, Integer
+from sqlalchemy import (BigInteger, Column, DateTime, ForeignKey, Integer,
+                        UniqueConstraint)
 
 
 class ViewModel(Base):
@@ -31,3 +32,5 @@ class ViewModel(Base):
         default=datetime.utcnow,
         nullable=False,
     )
+
+    UniqueConstraint(user_tg_id, media_id)

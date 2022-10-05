@@ -1,6 +1,6 @@
 from app.infrastructure.database.models import ViewModel
 from app.infrastructure.database.repositories.repo import Repo
-from sqlalchemy import func, select
+from sqlalchemy import func, insert, select
 
 
 class ViewsRepo(Repo):
@@ -20,3 +20,16 @@ class ViewsRepo(Repo):
         )
 
         return result.scalar_one()
+
+    async def create(
+        self,
+        tg_id: int,
+        media_id: int,
+    ):
+        await self.session.execute(
+            insert(ViewModel)
+            .values(
+                user_tg_id=tg_id,
+                media_id=media_id,
+            )
+        )
