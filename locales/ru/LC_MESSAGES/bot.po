@@ -34,7 +34,10 @@ msgid ""
 "Genres:\n"
 "\n"
 "{genres}"
-msgstr "Жанры: {genres}"
+msgstr ""
+"Жанры:\n"
+"\n"
+"{genres}"
 
 #: app/handlers/introduction.py:17
 msgid ""
