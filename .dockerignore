@@ -22,7 +22,6 @@ venv/
 
 mypy.ini
 tox.ini
-alembic.ini
 
 requirements-dev.txt
 
