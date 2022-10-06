@@ -41,8 +41,8 @@ async def genre_cmd(
     if not media_many:
         await m.reply(
             text=_(
-                "Not viewed media not found for this genre to you :(\n"
-                "Try again later, please!",
+                "You've viewed all media on this genre. "
+                "Try again later!",
             ),
             parse_mode="HTML",
             disable_web_page_preview=True,
@@ -106,7 +106,7 @@ async def genre_cmd(
 async def forbidden_genre_cmd_private(m: Message, _: I18nGettext):
     await m.answer(
         text=_(
-            "You aren't allowed to see nsfw content!\n\n"
+            "You aren't allowed to view NSFW-content!\n\n"
             "/settings — change settings"
         ),
         parse_mode="HTML",
@@ -118,7 +118,7 @@ async def forbidden_genre_cmd_private(m: Message, _: I18nGettext):
 async def forbidden_genre_cmd_public(m: Message, _: I18nGettext):
     await m.answer(
         text=_(
-            "You can't see nsfw content not in private messages! ^_^"
+            "You aren't allowed to view NSFW-content publicly!"
         ),
         parse_mode="HTML",
         disable_web_page_preview=True,

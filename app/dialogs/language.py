@@ -23,7 +23,7 @@ async def get_data(_: I18nGettext, **kwargs):
     ]
 
     select_language_text = _("Select a language:")
-    finish_dialog_text = _("Finish dialog")
+    finish_dialog_text = _("Finish the dialog")
 
     return {
         "languages": languages,

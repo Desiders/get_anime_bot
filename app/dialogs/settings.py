@@ -16,12 +16,12 @@ class Settings(StatesGroup):
 
 async def get_data(_: I18nGettext, **kwargs):
     show_nsfw_settings = [
-        (_("Show nsfw"), "show"),
-        (_("Hide nsfw"), "hide"),
+        (_("Show NSFW-content"), "show"),
+        (_("Hide NSFW-content"), "hide"),
     ]
 
     choice_settings_text = _("Choose your settings:")
-    finish_dialog_text = _("Finish dialog")
+    finish_dialog_text = _("Finish the dialog")
 
     return {
         "show_nsfw_settings": show_nsfw_settings,

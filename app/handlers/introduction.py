@@ -3,6 +3,7 @@ from itertools import chain
 
 from aiogram import Dispatcher
 from aiogram.types import Message, ReplyKeyboardRemove
+from aiogram.utils.text_decorations import html_decoration as html_dec
 from aiogram_dialog import DialogManager, StartMode
 from app.dialogs import Language, Settings
 from app.infrastructure.database.models import UserModel
@@ -14,13 +15,13 @@ async def start_cmd(m: Message, _: I18nGettext):
     first_name = html.escape(m.from_user.first_name)
 
     text = _(
-        "Hello, {first_name}!\n\n"
-        "Get an anime GIF or image by genre!\n"
+        "Hi, {first_name}!\n\n"
+        "Get an anime GIF or an image by genre!\n"
         "/genres_gif\n"
         "/genres_img\n"
-        "/genres_all (can return gif and image)\n\n"
-        "/language — change language\n"
-        "/settings — change settings"
+        "/genres_all\n\n"
+        "/language — change the language\n"
+        "/settings — change the settings"
     ).format(
         first_name=first_name,
     )
@@ -53,7 +54,7 @@ async def genres_gif_cmd(
     genres.sort()
 
     text = _(
-        "Available genres:\n\n{genres}"
+        "Genres:\n\n{genres}"
     ).format(
         genres=" ".join(map(lambda string: "/" + string, genres)),
     )
@@ -86,7 +87,7 @@ async def genres_img_cmd(
     genres.sort()
 
     text = _(
-        "Available genres:\n\n{genres}"
+        "Genres:\n\n{genres}"
     ).format(
         genres=" ".join(map(lambda string: "/" + string, genres)),
     )
@@ -119,7 +120,7 @@ async def genres_all_cmd(
     genres.sort()
 
     text = _(
-        "Available genres:\n\n{genres}"
+        "Genres:\n\n{genres}"
     ).format(
         genres=" ".join(map(lambda string: "/" + string, genres)),
     )
@@ -135,12 +136,13 @@ async def genres_all_cmd(
 
 async def source_cmd(m: Message, _: I18nGettext):
     text = _(
-        "Bot has open source code!\n\n"
-        "Source: {link}"
+        "The bot is open source!\n\n"
+        "{source_link}"
     ).format(
-        link=(
-            "https://github.com/Desiders/get_anime_bot"
-        )
+        source_link=html_dec.link(
+            "Source code",
+            "https://github.com/Desiders/get_anime_bot",
+        ),
     )
 
     await m.answer(

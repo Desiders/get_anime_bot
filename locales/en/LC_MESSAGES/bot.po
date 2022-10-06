@@ -1,14 +1,15 @@
-# Translations template for PROJECT.
+# Translations template for get_anime_bot.
 # Copyright (C) 2022 ORGANIZATION
-# This file is distributed under the same license as the PROJECT project.
+# This file is distributed under the same license as the get_anime_bot
+# project.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: PROJECT VERSION\n"
+"Project-Id-Version: get_anime_bot VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2022-06-22 21:39+0300\n"
-"PO-Revision-Date: 2022-06-22 21:39+0300\n"
+"POT-Creation-Date: 2022-10-06 22:00+0300\n"
+"PO-Revision-Date: 2022-10-06 22:06+0300\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: en\n"
@@ -17,73 +18,71 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "Generated-By: Babel 2.9.1\n"
-"X-Generator: Poedit 3.1\n"
-
-#: app/dialogs/language.py:25
-msgid "Select a language:"
-msgstr ""
-
-#: app/dialogs/language.py:26 app/dialogs/settings.py:24
-msgid "Finish dialog"
-msgstr ""
-
-#: app/dialogs/settings.py:19
-msgid "Show nsfw"
-msgstr ""
-
-#: app/dialogs/settings.py:20
-msgid "Hide nsfw"
-msgstr ""
+"X-Generator: Poedit 3.1.1\n"
 
 #: app/dialogs/settings.py:23
 msgid "Choose your settings:"
 msgstr ""
 
-#: app/handlers/errors.py:19
-msgid ""
-"It looks like this message belongs to another person or something went "
-"wrong. Try again!"
+#: app/dialogs/language.py:26 app/dialogs/settings.py:24
+msgid "Finish the dialog"
 msgstr ""
 
-#: app/handlers/introduction.py:16
+#: app/handlers/introduction.py:56 app/handlers/introduction.py:89
+#: app/handlers/introduction.py:122
 msgid ""
-"Hello, {first_name}!\n"
-"\n"
-"Get an anime GIF or image by genre!\n"
-"/genres_gif\n"
-"/genres_img\n"
-"/genres_all (can return gif and image)\n"
-"\n"
-"/language — change language\n"
-"/settings — change settings"
-msgstr ""
-
-#: app/handlers/introduction.py:55 app/handlers/introduction.py:87
-#: app/handlers/introduction.py:119
-msgid ""
-"Available genres:\n"
+"Genres:\n"
 "\n"
 "{genres}"
 msgstr ""
 
-#: app/handlers/introduction.py:134
+#: app/handlers/introduction.py:17
 msgid ""
-"Bot has open source code!\n"
+"Hi, {first_name}!\n"
 "\n"
-"Source: {link}"
+"Get an anime GIF or an image by genre!\n"
+"/genres_gif\n"
+"/genres_img\n"
+"/genres_all\n"
+"\n"
+"/language — change the language\n"
+"/settings — change the settings"
 msgstr ""
 
-#: app/handlers/media.py:44
-msgid "No media found for this genre :("
+#: app/dialogs/settings.py:20
+msgid "Hide NSFW-content"
 msgstr ""
 
-#: app/handlers/media.py:101
+#: app/handlers/errors.py:19
+msgid "It looks like this message belongs to another person or something went wrong"
+msgstr ""
+
+#: app/dialogs/language.py:25
+msgid "Select a language:"
+msgstr ""
+
+#: app/dialogs/settings.py:19
+msgid "Show NSFW-content"
+msgstr ""
+
+#: app/handlers/introduction.py:138
 msgid ""
-"You aren't allowed to see nsfw content!\n"
+"The bot is open source!\n"
+"\n"
+"{source_link}"
+msgstr ""
+
+#: app/handlers/media.py:120
+msgid "You aren't allowed to view NSFW-content publicly!"
+msgstr ""
+
+#: app/handlers/media.py:108
+msgid ""
+"You aren't allowed to view NSFW-content!\n"
 "\n"
 "/settings — change settings"
 msgstr ""
 
-#: app/handlers/media.py:113
-msgid "You can't see nsfw content not in private messages! ^_^"
+#: app/handlers/media.py:43
+msgid "You've viewed all media on this genre. Try again later!"
 msgstr ""

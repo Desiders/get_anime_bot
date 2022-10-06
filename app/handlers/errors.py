@@ -18,7 +18,7 @@ async def dialog_exception(u: Update, exc: UnknownIntent):
     await q.answer(
         text=_(
             "It looks like this message belongs to another person "
-            "or something went wrong. Try again!"
+            "or something went wrong"
         ),
         show_alert=True,
         cache_time=60,
