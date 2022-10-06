@@ -34,7 +34,7 @@ class Settings(BaseSettings):
 
 
 def load_config() -> Settings:
-    settings = SettingsExtractor()
+    settings = SettingsExtractor()  # type: ignore
 
     return Settings(
         bot=Bot(token=settings.BOT_TOKEN),

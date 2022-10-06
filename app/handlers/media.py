@@ -21,7 +21,7 @@ async def genre_cmd(
     sources: set[MediaSource],
     uow: UnitOfWork,
 ):
-    genre: str = m.get_command(pure=True)
+    genre: str = m.get_command(pure=True)  # type: ignore
 
     media_genre: MediaGenre
     for source in sources:
