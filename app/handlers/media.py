@@ -32,10 +32,10 @@ async def genre_cmd(
 
     media_many = await uow.media.get_not_viewed(
         tg_id=m.from_user.id,
-        genre=media_genre.raw_genre,
-        media_type=media_genre.media_type,
-        is_sfw=media_genre.is_sfw,
-        limit=5,
+        genre=media_genre.raw_genre,  # type: ignore
+        media_type=media_genre.media_type,  # type: ignore
+        is_sfw=media_genre.is_sfw,  # type: ignore
+        limit=1,
     )
 
     if not media_many:
@@ -95,7 +95,7 @@ async def genre_cmd(
     try:
         await uow.views.create(
             tg_id=m.from_user.id,
-            media_id=media.id,
+            media_id=media.id,  # type: ignore
         )
     except IntegrityError:
         await uow.rollback()

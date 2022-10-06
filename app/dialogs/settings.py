@@ -71,7 +71,7 @@ dialog = Dialog(
             id="show_nsfw",
             item_id_getter=operator.itemgetter(1),
             items="show_nsfw_settings",
-            on_click=select_show_nsfw_setting,
+            on_click=select_show_nsfw_setting,  # type: ignore
         ),
         Column(
             Button(
@@ -83,7 +83,7 @@ dialog = Dialog(
         ),
         state=Settings.main,
         getter=get_data,
-        parse_mode="HTML",
+        parse_mode="HTML",  # type: ignore
         disable_web_page_preview=True,
     ),
     launch_mode=LaunchMode.STANDARD,

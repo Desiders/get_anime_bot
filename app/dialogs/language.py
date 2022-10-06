@@ -74,7 +74,7 @@ dialog = Dialog(
             id="language",
             item_id_getter=operator.itemgetter(1),
             items="languages",
-            on_click=select_language,
+            on_click=select_language,  # type: ignore
         ),
         Column(
             Button(
@@ -86,7 +86,7 @@ dialog = Dialog(
         ),
         state=Language.main,
         getter=get_data,
-        parse_mode="HTML",
+        parse_mode="HTML",  # type: ignore
         disable_web_page_preview=True,
     ),
     launch_mode=LaunchMode.STANDARD,
