@@ -1,38 +1,30 @@
-import html
 from itertools import chain
 
 from aiogram import Dispatcher
 from aiogram.types import Message, ReplyKeyboardRemove
 from aiogram.utils.text_decorations import html_decoration as html_dec
 from aiogram_dialog import DialogManager, StartMode
-from app.dialogs import Language, Settings
 from app.infrastructure.database.models import UserModel
 from app.infrastructure.media import MediaSource
+from app.states import Language, Settings, Stats
 from app.typehints import I18nGettext
 
 
 async def start_cmd(m: Message, _: I18nGettext):
-    first_name = html.escape(m.from_user.first_name)
-
     text = _(
         "Hi, {first_name}!\n\n"
-        "Get an anime GIF or an image by genre!\n"
+        "Get an anime GIF or image by genre!\n"
         "/genres_gif\n"
         "/genres_img\n"
         "/genres_all\n\n"
         "/language — change the language\n"
-        "/settings — change the settings"
+        "/settings — change the settings\n"
+        "/stats — view the statistics"
     ).format(
-        first_name=first_name,
+        first_name=m.from_user.first_name,
     )
 
-    await m.answer(
-        text=text,
-        parse_mode="HTML",
-        disable_web_page_preview=True,
-        disable_notification=False,
-        reply_markup=ReplyKeyboardRemove(),
-    )
+    await m.answer(text, reply_markup=ReplyKeyboardRemove())
 
 
 async def genres_gif_cmd(
@@ -62,8 +54,6 @@ async def genres_gif_cmd(
     await m.answer(
         text=text,
         parse_mode="HTML",
-        disable_web_page_preview=True,
-        disable_notification=False,
         reply_markup=ReplyKeyboardRemove(),
     )
 
@@ -95,8 +85,6 @@ async def genres_img_cmd(
     await m.answer(
         text=text,
         parse_mode="HTML",
-        disable_web_page_preview=True,
-        disable_notification=False,
         reply_markup=ReplyKeyboardRemove(),
     )
 
@@ -128,8 +116,6 @@ async def genres_all_cmd(
     await m.answer(
         text=text,
         parse_mode="HTML",
-        disable_web_page_preview=True,
-        disable_notification=False,
         reply_markup=ReplyKeyboardRemove(),
     )
 
@@ -148,18 +134,29 @@ async def source_cmd(m: Message, _: I18nGettext):
     await m.answer(
         text=text,
         parse_mode="HTML",
-        disable_web_page_preview=True,
-        disable_notification=False,
         reply_markup=ReplyKeyboardRemove(),
     )
 
 
 async def language_cmd(m: Message, dialog_manager: DialogManager):
-    await dialog_manager.start(Language.main, mode=StartMode.RESET_STACK)
+    await dialog_manager.start(
+        Language.select_language,
+        mode=StartMode.RESET_STACK,
+    )
 
 
 async def settings_cmd(m: Message, dialog_manager: DialogManager):
-    await dialog_manager.start(Settings.main, mode=StartMode.RESET_STACK)
+    await dialog_manager.start(
+        Settings.select_settings,
+        mode=StartMode.RESET_STACK,
+    )
+
+
+async def stats_cmd(m: Message, dialog_manager: DialogManager):
+    await dialog_manager.start(
+        Stats.select_stats_type,
+        mode=StartMode.RESET_STACK,
+    )
 
 
 def register_introduction_handlers(dp: Dispatcher):
@@ -202,6 +199,12 @@ def register_introduction_handlers(dp: Dispatcher):
     dp.register_message_handler(
         settings_cmd,
         commands={"settings"},
+        content_types={"text"},
+        state="*",
+    )
+    dp.register_message_handler(
+        stats_cmd,
+        commands={"statistics", "stats"},
         content_types={"text"},
         state="*",
     )

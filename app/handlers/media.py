@@ -126,7 +126,7 @@ async def forbidden_genre_cmd_public(m: Message, _: I18nGettext):
     )
 
 
-def register_genre_handlers(dp: Dispatcher, *sources: MediaSource):
+def register_genre_handlers(dp: Dispatcher, sources: set[MediaSource]):
     sfw_genres = chain.from_iterable(
         source.sfw_genres for source in sources
     )

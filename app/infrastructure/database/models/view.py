@@ -5,7 +5,7 @@ from sqlalchemy import (BigInteger, Column, DateTime, ForeignKey, Integer,
                         UniqueConstraint)
 
 
-class ViewModel(Base):
+class ViewModel(Base):  # type: ignore
     __tablename__ = "views"
 
     id = Column(Integer, primary_key=True)

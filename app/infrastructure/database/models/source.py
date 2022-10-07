@@ -4,7 +4,7 @@ from app.infrastructure.database import Base
 from sqlalchemy import Column, DateTime, Integer, String
 
 
-class SourceModel(Base):
+class SourceModel(Base):  # type: ignore
     __tablename__ = "sources"
 
     id = Column(Integer, primary_key=True)

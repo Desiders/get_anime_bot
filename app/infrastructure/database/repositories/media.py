@@ -1,16 +1,29 @@
+from app.domain.media.dto.stats import Stats
 from app.infrastructure.database.models import MediaModel, ViewModel
 from app.infrastructure.database.repositories.repo import Repo
-from sqlalchemy import func, insert, select
+from sqlalchemy import case, func, insert, select
 
 
 class MediaRepo(Repo):
-    async def get_count_media(self) -> int:
-        result = await self.session.execute(
-            select(func.count('*'))
-            .select_from(MediaModel)
-        )
+    async def get_media_stats(self) -> Stats:
+        query = select(
+            func.count(MediaModel.id).label("total"),
+            func.count(
+                case([(MediaModel.media_type == "gif", 1)])).label("gif"),
+            func.count(
+                case([(MediaModel.media_type == "img", 1)])).label("img"),
+            func.count(
+                case([(MediaModel.media_type == "all", 1)])).label("all"),
+            func.count(case([(MediaModel.is_sfw.is_(True), 1)])).label("sfw"),
+            func.count(case([(MediaModel.is_sfw.is_(False), 1)])).label(
+                "nsfw"),
+        ).select_from(MediaModel)
 
-        return result.scalar_one()
+        result = await self.session.execute(query)
+
+        stats = result.one()
+
+        return Stats.from_orm(stats)
 
     async def get_not_viewed(
         self,

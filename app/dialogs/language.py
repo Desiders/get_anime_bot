@@ -1,34 +1,33 @@
 import operator
 
-from aiogram.dispatcher.filters.state import State, StatesGroup
 from aiogram.types import CallbackQuery
 from aiogram_dialog import Dialog, DialogManager, Window
-from aiogram_dialog.manager.protocols import LaunchMode
-from aiogram_dialog.widgets.kbd import Button, Column, Radio
+from aiogram_dialog.widgets.kbd import Button, Radio
 from aiogram_dialog.widgets.text import Format
 from app.infrastructure.database.repositories.uow import UnitOfWork
 from app.language_utils.language import AVAILABLE_LANGUAGES
 from app.middlewares import I18nMiddleware
+from app.states import Language
 from app.typehints import I18nGettext
 
 
-class Language(StatesGroup):
-    main = State()
+async def get_text(_: I18nGettext, **kwarg) -> dict[str, str]:
+    return {
+        "select_language_text": _("Select a language:"),
+        "finish_dialog_text": _("Finish the dialog"),
+    }
 
 
-async def get_data(_: I18nGettext, **kwargs):
+async def get_languages(
+    _: I18nGettext, **kwargs,
+) -> dict[str,  list[tuple[str | None, str]]]:
     languages = [
         (lang.label, lang.code)
         for lang in AVAILABLE_LANGUAGES.values()
     ]
 
-    select_language_text = _("Select a language:")
-    finish_dialog_text = _("Finish the dialog")
-
     return {
         "languages": languages,
-        "select_language_text": select_language_text,
-        "finish_dialog_text": finish_dialog_text,
     }
 
 
@@ -64,30 +63,23 @@ async def finish_dialog(
     await manager.done()
 
 
-dialog = Dialog(
+language = Dialog(
     Window(
-        # "Select a language:"
         Format("{select_language_text}"),
         Radio(
             checked_text=Format("✓ {item[0]}"),
             unchecked_text=Format("{item[0]}"),
-            id="language",
+            id="select_language",
             item_id_getter=operator.itemgetter(1),
             items="languages",
             on_click=select_language,  # type: ignore
         ),
-        Column(
-            Button(
-                # "Finish dialog"
-                text=Format("{finish_dialog_text}"),
-                id="finish",
-                on_click=finish_dialog,
-            ),
+        Button(
+            text=Format("{finish_dialog_text}"),
+            id="finish",
+            on_click=finish_dialog,
         ),
-        state=Language.main,
-        getter=get_data,
-        parse_mode="HTML",  # type: ignore
-        disable_web_page_preview=True,
+        state=Language.select_language,
+        getter=[get_text, get_languages],
     ),
-    launch_mode=LaunchMode.STANDARD,
 )

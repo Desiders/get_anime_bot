@@ -4,7 +4,7 @@ from sqlalchemy import func, insert, select
 
 
 class ViewsRepo(Repo):
-    async def get_count_views(self) -> int:
+    async def get_views_stats(self) -> int:
         result = await self.session.execute(
             select(func.count('*'))
             .select_from(ViewModel)
@@ -12,7 +12,7 @@ class ViewsRepo(Repo):
 
         return result.scalar_one()
 
-    async def get_count_views_by_tg_id(self, tg_id: int) -> int:
+    async def get_views_stats_by_tg_id(self, tg_id: int) -> int:
         result = await self.session.execute(
             select(func.count('*'))
             .where(ViewModel.user_tg_id == tg_id)

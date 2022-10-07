@@ -12,7 +12,7 @@ from structlog.stdlib import BoundLogger
 
 from app.config_reader import load_config
 from app.constants import LOCALES_DIR
-from app.dialogs import language_dialog, settings_dialog
+from app.dialogs import language_dialog, settings_dialog, stats_dialog
 from app.handlers import (register_error_handlers, register_genre_handlers,
                           register_introduction_handlers)
 from app.infrastructure.database import make_connection_string, sa_sessionmaker
@@ -69,6 +69,35 @@ async def start_scheduler(
     await start_parse_media(sources, sa_sessionmaker)
 
 
+def setup_middlewares(
+    dp: Dispatcher,
+    sources: set[MediaSource],
+    sm: sessionmaker,
+):
+    dp.setup_middleware(DatabaseMiddleware(sm))
+    dp.setup_middleware(ACLMiddleware())
+    dp.setup_middleware(I18nMiddleware(
+        domain="bot",
+        path=LOCALES_DIR,
+        default=DEFAULT_LANGUAGE.code,
+    ))
+    dp.setup_middleware(EnvironmentMiddleware({"sources": sources}))
+
+
+def register_handlers(dp: Dispatcher, sources: set[MediaSource]):
+    register_introduction_handlers(dp)
+    register_genre_handlers(dp, sources)
+    register_error_handlers(dp)
+    logger.info("Handlers are registered")
+
+
+def register_dialogs(dr: DialogRegistry):
+    dr.register(language_dialog)
+    dr.register(settings_dialog)
+    dr.register(stats_dialog)
+    logger.info("Dialogs are registered")
+
+
 async def main():
     logging_configure()
     logger.info("Logging is configured")
@@ -85,59 +114,44 @@ async def main():
         bot=bot,
         storage=MemoryStorage(),
     )
+    dr = DialogRegistry(dp)
 
     nekos_life = NekosLife()
     nekos_fun = NekosFun()
     waifu_pics = WaifuPics()
 
-    await set_bot_commands(bot)
-    logger.info("Bot commands are set")
+    sources: set[MediaSource] = {nekos_life, nekos_fun, waifu_pics}
 
     sm = sa_sessionmaker(make_connection_string(config.database))
 
-    dp.setup_middleware(DatabaseMiddleware(sm))
-    dp.setup_middleware(ACLMiddleware())
-    dp.setup_middleware(I18nMiddleware(
-        domain="bot",
-        path=LOCALES_DIR,
-        default=DEFAULT_LANGUAGE.code,
-    ))
-    dp.setup_middleware(EnvironmentMiddleware({
-        "sources": {nekos_life, nekos_fun, waifu_pics},
-    }))
+    await set_bot_commands(bot)
+    logger.info("Bot commands are set")
+
+    setup_middlewares(dp, sources, sm)
     logger.info("Middlewares are registered")
 
-    register_introduction_handlers(dp)
-    register_genre_handlers(dp, nekos_life, nekos_fun, waifu_pics)
-    register_error_handlers(dp)
+    register_handlers(dp, sources)
     logger.info("Handlers are registered")
 
-    registry = DialogRegistry(dp)
-    registry.register(language_dialog)
-    registry.register(settings_dialog)
+    register_dialogs(dr)
     logger.info("Dialogs are registered")
 
-    await start_scheduler({nekos_life, nekos_fun, waifu_pics}, sm)
-    logger.info("Scheduler is started")
+    # await start_scheduler(sources, sm)
+    # logger.info("Scheduler is started")
 
     try:
         logger.info("Bot starting!")
         await dp.start_polling(
             allowed_updates=[
-                "message_handlers", "callback_query_handlers",
+                "message_handlers",
+                "callback_query_handlers",
             ],
         )
     finally:
         logger.error("Bot stopped!")
 
-        bot_session = await bot.get_session()
-        if bot_session is not None:
-            await bot_session.close()
-        logger.warning("Bot session closed")
-
-        await nekos_life.close()
-        await nekos_fun.close()
-        await waifu_pics.close()
+        for source in sources:
+            await source.close()
         logger.warning("Closed sources")
 
 

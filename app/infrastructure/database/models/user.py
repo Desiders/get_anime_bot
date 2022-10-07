@@ -4,7 +4,7 @@ from app.infrastructure.database import Base
 from sqlalchemy import BigInteger, Boolean, Column, DateTime, Integer, String
 
 
-class UserModel(Base):
+class UserModel(Base):  # type: ignore
     __tablename__ = "users"
 
     id = Column(Integer, primary_key=True)

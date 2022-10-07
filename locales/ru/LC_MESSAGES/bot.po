@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: get_anime_bot VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2022-10-06 22:00+0300\n"
-"PO-Revision-Date: 2022-10-06 22:04+0300\n"
+"POT-Creation-Date: 2022-10-07 20:33+0300\n"
+"PO-Revision-Date: 2022-10-07 20:53+0300\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: ru\n"
@@ -20,36 +20,35 @@ msgstr ""
 "Generated-By: Babel 2.9.1\n"
 "X-Generator: Poedit 3.1.1\n"
 
-#: app/dialogs/settings.py:23
+#: app/dialogs/settings.py:14
 msgid "Choose your settings:"
 msgstr "Выберите настройки:"
 
-#: app/dialogs/language.py:26 app/dialogs/settings.py:24
+#: app/dialogs/language.py:17 app/dialogs/settings.py:15
+#: app/dialogs/stats.py:20
 msgid "Finish the dialog"
 msgstr "Завершить диалог"
 
-#: app/handlers/introduction.py:56 app/handlers/introduction.py:89
-#: app/handlers/introduction.py:122
+#: app/handlers/introduction.py:48 app/handlers/introduction.py:79
+#: app/handlers/introduction.py:110
 msgid ""
 "Genres:\n"
 "\n"
 "{genres}"
-msgstr ""
-"Жанры:\n"
-"\n"
-"{genres}"
+msgstr "Жанры: {genres}"
 
-#: app/handlers/introduction.py:17
+#: app/handlers/introduction.py:14
 msgid ""
 "Hi, {first_name}!\n"
 "\n"
-"Get an anime GIF or an image by genre!\n"
+"Get an anime GIF or image by genre!\n"
 "/genres_gif\n"
 "/genres_img\n"
 "/genres_all\n"
 "\n"
 "/language — change the language\n"
-"/settings — change the settings"
+"/settings — change the settings\n"
+"/stats — view the statistics"
 msgstr ""
 "Привет, {first_name}!\n"
 "\n"
@@ -59,25 +58,34 @@ msgstr ""
 "/genres_all\n"
 "\n"
 "/language — изменить язык\n"
-"/settings — изменить настройки"
+"/settings — изменить настройки\n"
+"/stats — посмотреть статистику"
 
-#: app/dialogs/settings.py:20
-msgid "Hide NSFW-content"
-msgstr "Скрыть NSFW-контент"
+#: app/dialogs/settings.py:24
+msgid "Hide NSFW"
+msgstr "Скрывать NSFW"
 
 #: app/handlers/errors.py:19
 msgid "It looks like this message belongs to another person or something went wrong"
 msgstr "Похоже, что это сообщение принадлежит другому человеку или что-то пошло не так"
 
-#: app/dialogs/language.py:25
+#: app/dialogs/stats.py:28
+msgid "Media in database"
+msgstr "Медиа в базе"
+
+#: app/dialogs/language.py:16
 msgid "Select a language:"
 msgstr "Выберите язык:"
 
-#: app/dialogs/settings.py:19
-msgid "Show NSFW-content"
-msgstr "Показывать NSFW-контент"
+#: app/dialogs/stats.py:19
+msgid "Select a stats type:"
+msgstr "Выберите тип статистики:"
 
-#: app/handlers/introduction.py:138
+#: app/dialogs/settings.py:23
+msgid "Show NSFW"
+msgstr "Показывать NSFW"
+
+#: app/handlers/introduction.py:124
 msgid ""
 "The bot is open source!\n"
 "\n"
@@ -86,6 +94,34 @@ msgstr ""
 "Бот имеет открытый исходный код!\n"
 "\n"
 "{source_link}"
+
+#: app/dialogs/stats.py:63
+msgid ""
+"Total count: {stats.total}\n"
+"GIF count: {stats.gif}\n"
+"IMG count: {stats.img}\n"
+"ALL count: {stats.all}\n"
+"SFW count: {stats.sfw}\n"
+"NSFW count: {stats.nsfw}"
+msgstr ""
+"Количество в общем: {stats.total}\n"
+"Количество GIF: {stats.gif}\n"
+"Количество изображений: {stats.img}\n"
+"Количество GIF или изображений (all): {stats.all}\n"
+"Количество SFW: {stats.sfw}\n"
+"Количество NSFW: {stats.nsfw}"
+
+#: app/dialogs/stats.py:80 app/dialogs/stats.py:83
+msgid "Total count: {stats}"
+msgstr "Количество в общем: {stats}"
+
+#: app/dialogs/stats.py:30
+msgid "Viewed media by all"
+msgstr "Просмотренные всеми медиа"
+
+#: app/dialogs/stats.py:29
+msgid "Viewed media by me"
+msgstr "Просмотренные мной медиа"
 
 #: app/handlers/media.py:120
 msgid "You aren't allowed to view NSFW-content publicly!"

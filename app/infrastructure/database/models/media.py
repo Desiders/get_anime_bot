@@ -5,7 +5,7 @@ from sqlalchemy import (Boolean, Column, DateTime, ForeignKey, Integer, String,
                         UniqueConstraint)
 
 
-class MediaModel(Base):
+class MediaModel(Base):  # type: ignore
     __tablename__ = "media"
 
     id = Column(Integer, primary_key=True)

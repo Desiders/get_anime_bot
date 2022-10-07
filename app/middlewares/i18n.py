@@ -22,18 +22,18 @@ class I18nMiddleware(BaseI18nMiddleware):
             uow: UnitOfWork = data["uow"]
 
             await uow.users.update_language_code(
-                user.tg_id, language_code,
+                user.tg_id, language_code,  # type: ignore
             )
             await uow.commit()
 
-            user.language_code = language_code
+            user.language_code = language_code  # type: ignore
             data["user"] = user
 
         data["_"] = self.gettext
         obj.bot["gettext"] = self.gettext
         obj.bot["i18n"] = self
 
-        return language_code
+        return language_code  # type: ignore
 
     def change_user_locale(self, locale: str):
-        self.ctx_locale.set(locale)
+        self.ctx_locale.set(locale)  # type: ignore
