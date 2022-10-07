@@ -61,14 +61,14 @@ async def select_stats_type(
     if stats_type_name == StatsType.MEDIA.name:
         stats = await uow.media.get_media_stats()
         text = _(
-            "Total count: {stats.total}\n"
-            "GIF count: {stats.gif}\n"
-            "IMG count: {stats.img}\n"
-            "ALL count: {stats.all}\n"
-            "SFW count: {stats.sfw}\n"
-            "NSFW count: {stats.nsfw}"
+            "Total count: {total}\n"
+            "GIF count: {gif}\n"
+            "IMG count: {img}\n"
+            "ALL count: {all}\n"
+            "SFW count: {sfw}\n"
+            "NSFW count: {nsfw}"
         ).format(
-            stats=stats.total,
+            total=stats.total,
             gif=stats.gif,
             img=stats.img,
             all=stats.all,
@@ -77,10 +77,10 @@ async def select_stats_type(
         )
     elif stats_type_name == StatsType.VIEWED_BY_ME.name:
         stats = await uow.views.get_views_stats()
-        text = _("Total count: {stats}").format(stats=stats)
+        text = _("Total count: {total}").format(total=stats)
     elif stats_type_name == StatsType.VIEWED_BY_ALL.name:
         stats = await uow.views.get_views_stats_by_tg_id(c.from_user.id)
-        text = _("Total count: {stats}").format(stats=stats)
+        text = _("Total count: {total}").format(total=stats)
     else:
         raise NotImplementedError(
             f"Stats type `{stats_type_name}` is not implemented"
