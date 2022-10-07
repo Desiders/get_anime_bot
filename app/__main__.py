@@ -136,8 +136,8 @@ async def main():
     register_dialogs(dr)
     logger.info("Dialogs are registered")
 
-    # await start_scheduler(sources, sm)
-    # logger.info("Scheduler is started")
+    await start_scheduler(sources, sm)
+    logger.info("Scheduler is started")
 
     try:
         logger.info("Bot starting!")
