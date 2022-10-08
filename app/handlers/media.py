@@ -1,18 +1,57 @@
 from itertools import chain
 
 from aiogram import Dispatcher
-from aiogram.types import KeyboardButton, Message, ReplyKeyboardMarkup
+from aiogram.types import (KeyboardButton, Message, ReplyKeyboardMarkup,
+                           ReplyKeyboardRemove)
 from aiogram.utils.exceptions import FileIsTooBig, WrongFileIdentifier
 from app.filters import CheckGenreIn, NSFWSettings
+from app.infrastructure.database.models import UserModel
 from app.infrastructure.database.repositories import UnitOfWork
 from app.infrastructure.media import MediaSource
 from app.infrastructure.media.base.schemas import MediaGenre
+from app.media_utils import get_sorted_genres, get_text
 from app.typehints import I18nGettext
 from sqlalchemy.exc import IntegrityError
 from structlog import get_logger
 from structlog.stdlib import BoundLogger
 
 logger: BoundLogger = get_logger()
+
+
+async def genres_gif_cmd(
+    m: Message,
+    _: I18nGettext,
+    sources: set[MediaSource],
+    user: UserModel,
+):
+    genres = get_sorted_genres(sources, user.show_nsfw, "gif")  # type: ignore
+    text = get_text(genres, _)
+
+    await m.answer(text, reply_markup=ReplyKeyboardRemove())
+
+
+async def genres_img_cmd(
+    m: Message,
+    _: I18nGettext,
+    sources: set[MediaSource],
+    user: UserModel,
+):
+    genres = get_sorted_genres(sources, user.show_nsfw, "img")  # type: ignore
+    text = get_text(genres, _)
+
+    await m.answer(text, reply_markup=ReplyKeyboardRemove())
+
+
+async def genres_all_cmd(
+    m: Message,
+    _: I18nGettext,
+    sources: set[MediaSource],
+    user: UserModel,
+):
+    genres = get_sorted_genres(sources, user.show_nsfw, "all")  # type: ignore
+    text = get_text(genres, _)
+
+    await m.answer(text, reply_markup=ReplyKeyboardRemove())
 
 
 async def genre_cmd(
@@ -44,9 +83,6 @@ async def genre_cmd(
                 "You've viewed all media on this genre. "
                 "Try again later!",
             ),
-            parse_mode="HTML",
-            disable_web_page_preview=True,
-            disable_notification=False,
         )
         return
     else:
@@ -109,9 +145,6 @@ async def forbidden_genre_cmd_private(m: Message, _: I18nGettext):
             "You aren't allowed to view NSFW-content!\n\n"
             "/settings — change settings"
         ),
-        parse_mode="HTML",
-        disable_web_page_preview=True,
-        disable_notification=False,
     )
 
 
@@ -120,9 +153,6 @@ async def forbidden_genre_cmd_public(m: Message, _: I18nGettext):
         text=_(
             "You aren't allowed to view NSFW-content publicly!"
         ),
-        parse_mode="HTML",
-        disable_web_page_preview=True,
-        disable_notification=False,
     )
 
 
@@ -137,6 +167,24 @@ def register_genre_handlers(dp: Dispatcher, sources: set[MediaSource]):
     SFWGenres = CheckGenreIn(genres=sfw_genres)
     NSFWGenres = CheckGenreIn(genres=nsfw_genres)
 
+    dp.register_message_handler(
+        genres_gif_cmd,
+        commands={"genres_gif"},
+        content_types={"text"},
+        state="*",
+    )
+    dp.register_message_handler(
+        genres_img_cmd,
+        commands={"genres_img"},
+        content_types={"text"},
+        state="*",
+    )
+    dp.register_message_handler(
+        genres_all_cmd,
+        commands={"genres_all"},
+        content_types={"text"},
+        state="*",
+    )
     dp.register_message_handler(
         genre_cmd,
         SFWGenres,

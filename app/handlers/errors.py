@@ -8,14 +8,10 @@ from structlog.stdlib import BoundLogger
 logger: BoundLogger = get_logger()
 
 
-async def dialog_exception(u: Update, exc: UnknownIntent):
-    logger.warning("Dialog exception", update=u, exception=repr(exc))
-
-    q = u.callback_query
-
+async def dialog_exception(u: Update, exc: UnknownIntent) -> bool:
     _: I18nGettext = u.bot["gettext"]
 
-    await q.answer(
+    await u.callback_query.answer(
         text=_(
             "It looks like this message belongs to another person "
             "or something went wrong"

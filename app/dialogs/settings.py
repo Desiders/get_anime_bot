@@ -2,17 +2,17 @@ import operator
 
 from aiogram.types import CallbackQuery
 from aiogram_dialog import Dialog, DialogManager, Window
-from aiogram_dialog.widgets.kbd import Button, Radio
+from aiogram_dialog.widgets.kbd import Button, Cancel, Radio
 from aiogram_dialog.widgets.text import Format
 from app.infrastructure.database.repositories.uow import UnitOfWork
 from app.states import Settings
 from app.typehints import I18nGettext
 
 
-async def get_text(_: I18nGettext, **kwarg) -> dict[str, str]:
+async def get_text(_: I18nGettext, **kwargs) -> dict[str, str]:
     return {
         "choice_settings_text": _("Choose your settings:"),
-        "finish_dialog_text": _("Finish the dialog"),
+        "cancel_text": _("Go back"),
     }
 
 
@@ -70,12 +70,8 @@ settings = Dialog(
             items="nsfw_settings",
             on_click=select_nsfw_setting,  # type: ignore
         ),
-        Button(
-            text=Format("{finish_dialog_text}"),
-            id="finish",
-            on_click=finish_dialog,
-        ),
-        state=Settings.select_settings,
+        Cancel(Format("{cancel_text}")),
         getter=[get_text, get_settings],
+        state=Settings.select_settings,
     ),
 )

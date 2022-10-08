@@ -12,7 +12,8 @@ from structlog.stdlib import BoundLogger
 
 from app.config_reader import load_config
 from app.constants import LOCALES_DIR
-from app.dialogs import language_dialog, settings_dialog, stats_dialog
+from app.dialogs import (language_dialog, main_menu_dialog, settings_dialog,
+                         stats_dialog)
 from app.handlers import (register_error_handlers, register_genre_handlers,
                           register_introduction_handlers)
 from app.infrastructure.database import make_connection_string, sa_sessionmaker
@@ -47,6 +48,18 @@ async def set_bot_commands(bot: Bot):
         command="source",
         description="Show source code",
     )
+    cmd_language = BotCommand(
+        command="language",
+        description="Change language",
+    )
+    cmd_settings = BotCommand(
+        command="settings",
+        description="Change settings",
+    )
+    cmd_stats = BotCommand(
+        command="stats",
+        description="Show statistics",
+    )
 
     public = [
         cmd_help, cmd_gif,
@@ -55,7 +68,8 @@ async def set_bot_commands(bot: Bot):
     private = [
         cmd_help, cmd_gif,
         cmd_img, cmd_all,
-        cmd_source,
+        cmd_source, cmd_language,
+        cmd_settings, cmd_stats,
     ]
 
     await bot.set_my_commands(public, BotCommandScopeAllGroupChats())
@@ -92,6 +106,7 @@ def register_handlers(dp: Dispatcher, sources: set[MediaSource]):
 
 
 def register_dialogs(dr: DialogRegistry):
+    dr.register(main_menu_dialog)
     dr.register(language_dialog)
     dr.register(settings_dialog)
     dr.register(stats_dialog)
