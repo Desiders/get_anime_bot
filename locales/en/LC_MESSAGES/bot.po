@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: get_anime_bot VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2022-10-08 14:00+0300\n"
-"PO-Revision-Date: 2022-10-08 14:02+0300\n"
+"POT-Creation-Date: 2022-10-09 16:07+0300\n"
+"PO-Revision-Date: 2022-10-09 16:07+0300\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: en\n"
@@ -32,7 +32,7 @@ msgstr ""
 msgid "Choose your settings:"
 msgstr ""
 
-#: app/media_utils/text.py:7
+#: app/media_utils/genres.py:76
 msgid ""
 "Genres:\n"
 "\n"
@@ -40,7 +40,7 @@ msgid ""
 msgstr ""
 
 #: app/dialogs/language.py:17 app/dialogs/settings.py:15
-#: app/dialogs/stats.py:20
+#: app/dialogs/stats.py:21
 msgid "Go back"
 msgstr ""
 
@@ -62,19 +62,23 @@ msgstr ""
 msgid "It looks like this message belongs to another person or something went wrong"
 msgstr ""
 
-#: app/dialogs/stats.py:28
+#: app/dialogs/stats.py:29
 msgid "Media in database"
 msgstr ""
 
-#: app/media_utils/text.py:6
+#: app/media_utils/genres.py:75
 msgid "No genres found"
+msgstr ""
+
+#: app/media_utils/stats.py:20
+msgid "No media found"
 msgstr ""
 
 #: app/dialogs/language.py:16
 msgid "Select a language:"
 msgstr ""
 
-#: app/dialogs/stats.py:19
+#: app/dialogs/stats.py:20
 msgid "Select a stats type:"
 msgstr ""
 
@@ -89,16 +93,24 @@ msgid ""
 "{source_link}"
 msgstr ""
 
-#: app/dialogs/stats.py:80 app/dialogs/stats.py:83
-msgid "Total count: {total}"
-msgstr ""
-
-#: app/dialogs/stats.py:63
+#: app/media_utils/stats.py:76
 msgid ""
 "Total count: {total}\n"
 "GIF count: {gif}\n"
+"\tGenres SFW count:\n"
+"{sfw_media_gif_stats_text}\n"
+"\tGenres NSFW count:\n"
+"{nsfw_media_gif_stats_text}\n"
 "IMG count: {img}\n"
+"\tGenres SFW count:\n"
+"{sfw_media_img_stats_text}\n"
+"\tGenres NSFW count:\n"
+"{nsfw_media_img_stats_text}\n"
 "ALL count: {all}\n"
+"\tGenres SFW count:\n"
+"{sfw_media_all_stats_text}\n"
+"\tGenres NSFW count:\n"
+"{nsfw_media_all_stats_text}\n"
 "SFW count: {sfw}\n"
 "NSFW count: {nsfw}"
 msgstr ""
@@ -107,11 +119,11 @@ msgstr ""
 msgid "View statistics"
 msgstr ""
 
-#: app/dialogs/stats.py:30
+#: app/dialogs/stats.py:31
 msgid "Viewed media by all"
 msgstr ""
 
-#: app/dialogs/stats.py:29
+#: app/dialogs/stats.py:30
 msgid "Viewed media by me"
 msgstr ""
 

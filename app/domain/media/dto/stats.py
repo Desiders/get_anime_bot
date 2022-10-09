@@ -1,5 +1,7 @@
 from app.domain.common.dto import DTO
 
+from .media import Media
+
 
 class Stats(DTO):
     total: int
@@ -8,3 +10,4 @@ class Stats(DTO):
     all: int
     sfw: int
     nsfw: int
+    media: list[Media]

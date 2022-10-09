@@ -1,6 +1,7 @@
 from itertools import chain
 
 from app.infrastructure.media import MediaSource
+from app.typehints import I18nGettext
 
 
 def get_sorted_genres_gif(
@@ -67,3 +68,13 @@ def get_sorted_genres(
         return get_sorted_genres_all(sources, show_nsfw)
     else:
         raise NotImplementedError(f"Unknown genres type `{genres_type}`")
+
+
+def get_text_by_genres(genres: list[str], _: I18nGettext) -> str:
+    if not genres:
+        return _("No genres found")
+    return _(
+        "Genres:\n\n{genres}"
+    ).format(
+        genres=" ".join(map(lambda string: "/" + string, genres)),
+    )

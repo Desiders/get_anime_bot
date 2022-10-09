@@ -9,7 +9,7 @@ from app.infrastructure.database.models import UserModel
 from app.infrastructure.database.repositories import UnitOfWork
 from app.infrastructure.media import MediaSource
 from app.infrastructure.media.base.schemas import MediaGenre
-from app.media_utils import get_sorted_genres, get_text
+from app.media_utils import get_sorted_genres, get_text_by_genres
 from app.typehints import I18nGettext
 from sqlalchemy.exc import IntegrityError
 from structlog import get_logger
@@ -25,7 +25,7 @@ async def genres_gif_cmd(
     user: UserModel,
 ):
     genres = get_sorted_genres(sources, user.show_nsfw, "gif")  # type: ignore
-    text = get_text(genres, _)
+    text = get_text_by_genres(genres, _)
 
     await m.answer(text, reply_markup=ReplyKeyboardRemove())
 
@@ -37,7 +37,7 @@ async def genres_img_cmd(
     user: UserModel,
 ):
     genres = get_sorted_genres(sources, user.show_nsfw, "img")  # type: ignore
-    text = get_text(genres, _)
+    text = get_text_by_genres(genres, _)
 
     await m.answer(text, reply_markup=ReplyKeyboardRemove())
 
@@ -49,7 +49,7 @@ async def genres_all_cmd(
     user: UserModel,
 ):
     genres = get_sorted_genres(sources, user.show_nsfw, "all")  # type: ignore
-    text = get_text(genres, _)
+    text = get_text_by_genres(genres, _)
 
     await m.answer(text, reply_markup=ReplyKeyboardRemove())
 

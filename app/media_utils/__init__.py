@@ -1,2 +1,2 @@
-from .genres import get_sorted_genres
-from .text import get_text
+from .genres import get_sorted_genres, get_text_by_genres
+from .stats import get_stats_text

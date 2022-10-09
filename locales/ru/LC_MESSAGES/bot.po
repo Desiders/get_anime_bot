@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: get_anime_bot VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2022-10-08 14:00+0300\n"
-"PO-Revision-Date: 2022-10-08 14:03+0300\n"
+"POT-Creation-Date: 2022-10-09 15:56+0300\n"
+"PO-Revision-Date: 2022-10-09 16:06+0300\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: ru\n"
@@ -32,7 +32,7 @@ msgstr "Изменить настройки"
 msgid "Choose your settings:"
 msgstr "Выберите настройки:"
 
-#: app/media_utils/text.py:7
+#: app/media_utils/genres.py:76
 msgid ""
 "Genres:\n"
 "\n"
@@ -43,7 +43,7 @@ msgstr ""
 "{genres}"
 
 #: app/dialogs/language.py:17 app/dialogs/settings.py:15
-#: app/dialogs/stats.py:20
+#: app/dialogs/stats.py:21
 msgid "Go back"
 msgstr "Вернуться назад"
 
@@ -71,19 +71,23 @@ msgstr "Скрывать NSFW"
 msgid "It looks like this message belongs to another person or something went wrong"
 msgstr "Похоже, что это сообщение принадлежит другому человеку или что-то пошло не так"
 
-#: app/dialogs/stats.py:28
+#: app/dialogs/stats.py:29
 msgid "Media in database"
 msgstr "Медиа в базе"
 
-#: app/media_utils/text.py:6
+#: app/media_utils/genres.py:75
 msgid "No genres found"
 msgstr "Жанров не найдено"
+
+#: app/media_utils/stats.py:20
+msgid "No media found"
+msgstr "Медиа не найдено"
 
 #: app/dialogs/language.py:16
 msgid "Select a language:"
 msgstr "Выберите язык:"
 
-#: app/dialogs/stats.py:19
+#: app/dialogs/stats.py:20
 msgid "Select a stats type:"
 msgstr "Выберите тип статистики:"
 
@@ -101,23 +105,43 @@ msgstr ""
 "\n"
 "{source_link}"
 
-#: app/dialogs/stats.py:80 app/dialogs/stats.py:83
-msgid "Total count: {total}"
-msgstr "Количество в общем: {total}"
-
-#: app/dialogs/stats.py:63
+#: app/media_utils/stats.py:76
 msgid ""
 "Total count: {total}\n"
 "GIF count: {gif}\n"
+"\tGenres SFW count:\n"
+"{sfw_media_gif_stats_text}\n"
+"\tGenres NSFW count:\n"
+"{nsfw_media_gif_stats_text}\n"
 "IMG count: {img}\n"
+"\tGenres SFW count:\n"
+"{sfw_media_img_stats_text}\n"
+"\tGenres NSFW count:\n"
+"{nsfw_media_img_stats_text}\n"
 "ALL count: {all}\n"
+"\tGenres SFW count:\n"
+"{sfw_media_all_stats_text}\n"
+"\tGenres NSFW count:\n"
+"{nsfw_media_all_stats_text}\n"
 "SFW count: {sfw}\n"
 "NSFW count: {nsfw}"
 msgstr ""
-"Количество в общем: {total}\n"
+"Общее количество: {total}\n"
 "Количество GIF: {gif}\n"
-"Количество изображений: {img}\n"
-"Количество GIF или изображений: {all}\n"
+"\tКоличества SFW жанров:\n"
+"{sfw_media_gif_stats_text}\n"
+"\tКоличества NSFW жанров:\n"
+"{nsfw_media_gif_stats_text}\n"
+"Количество IMG: {img}\n"
+"\tКоличества SFW жанров:\n"
+"{sfw_media_img_stats_text}\n"
+"\tКоличества NSFW жанров:\n"
+"{nsfw_media_img_stats_text}\n"
+"Количество ALL: {all}\n"
+"\tКоличества SFW жанров:\n"
+"{sfw_media_all_stats_text}\n"
+"\tКоличества NSFW жанров:\n"
+"{nsfw_media_all_stats_text}\n"
 "Количество SFW: {sfw}\n"
 "Количество NSFW: {nsfw}"
 
@@ -125,11 +149,11 @@ msgstr ""
 msgid "View statistics"
 msgstr "Посмотреть статистику"
 
-#: app/dialogs/stats.py:30
+#: app/dialogs/stats.py:31
 msgid "Viewed media by all"
 msgstr "Просмотренные всеми медиа"
 
-#: app/dialogs/stats.py:29
+#: app/dialogs/stats.py:30
 msgid "Viewed media by me"
 msgstr "Просмотренные мной медиа"
 

@@ -1,1 +1,1 @@
-from .get_media import start_parse_media
+from .media import start_parse_media

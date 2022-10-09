@@ -6,6 +6,7 @@ from aiogram_dialog.widgets.kbd import Button, Cancel, Column, Radio
 from aiogram_dialog.widgets.text import Format, Multi
 from app.domain.media.models import StatsType
 from app.infrastructure.database.repositories.uow import UnitOfWork
+from app.media_utils import get_stats_text as get_media_stats_text
 from app.states import Stats
 from app.typehints import I18nGettext
 from structlog import get_logger
@@ -57,36 +58,18 @@ async def select_stats_type(
     uow: UnitOfWork = c.bot["uow"]
     _: I18nGettext = c.bot["gettext"]
 
-    text: str | None = None
     if stats_type_name == StatsType.MEDIA.name:
         stats = await uow.media.get_media_stats()
-        text = _(
-            "Total count: {total}\n"
-            "GIF count: {gif}\n"
-            "IMG count: {img}\n"
-            "ALL count: {all}\n"
-            "SFW count: {sfw}\n"
-            "NSFW count: {nsfw}"
-        ).format(
-            total=stats.total,
-            gif=stats.gif,
-            img=stats.img,
-            all=stats.all,
-            sfw=stats.sfw,
-            nsfw=stats.nsfw,
-        )
     elif stats_type_name == StatsType.VIEWED_BY_ME.name:
-        stats = await uow.views.get_views_stats_by_tg_id(c.from_user.id)
-        text = _("Total count: {total}").format(total=stats)
+        stats = await uow.media.get_viewed_media_stats_by_tg_id(c.from_user.id)
     elif stats_type_name == StatsType.VIEWED_BY_ALL.name:
-        stats = await uow.views.get_views_stats()
-        text = _("Total count: {total}").format(total=stats)
+        stats = await uow.media.get_viewed_media_stats()
     else:
         raise NotImplementedError(
             f"Stats type `{stats_type_name}` is not implemented"
         )
 
-    manager.data["stats_text"] = text
+    manager.data["stats_text"] = get_media_stats_text(stats, _)
 
     await c.answer(cache_time=1)
 
