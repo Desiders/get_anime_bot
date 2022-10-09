@@ -24,6 +24,11 @@ AVAILABLE_LANGUAGES = {
         flag="🇷🇺",
         title="Русский",
     ),
+    "ua": LanguageData(
+        code="ua",
+        flag="🇺🇦",
+        title="Українська",
+    ),
 }
 
 
