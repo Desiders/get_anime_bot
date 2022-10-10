@@ -2,7 +2,7 @@ import operator
 
 from aiogram.types import CallbackQuery
 from aiogram_dialog import Dialog, DialogManager, Window
-from aiogram_dialog.widgets.kbd import Button, Cancel, Radio
+from aiogram_dialog.widgets.kbd import Button, Cancel, Radio, ScrollingGroup
 from aiogram_dialog.widgets.text import Format
 from app.infrastructure.database.repositories.uow import UnitOfWork
 from app.language_utils.language import AVAILABLE_LANGUAGES
@@ -66,13 +66,18 @@ async def finish_dialog(
 language = Dialog(
     Window(
         Format("{select_language_text}"),
-        Radio(
-            checked_text=Format("✓ {item[0]}"),
-            unchecked_text=Format("{item[0]}"),
-            id="select_language",
-            item_id_getter=operator.itemgetter(1),
-            items="languages",
-            on_click=select_language,  # type: ignore
+        ScrollingGroup(
+            Radio(
+                checked_text=Format("✓ {item[0]}"),
+                unchecked_text=Format("{item[0]}"),
+                id="select_language",
+                item_id_getter=operator.itemgetter(1),
+                items="languages",
+                on_click=select_language,  # type: ignore
+            ),
+            id="scrolling_languages",
+            width=2,
+            height=6,
         ),
         Cancel(Format("{cancel_text}")),
         getter=[get_text, get_languages],

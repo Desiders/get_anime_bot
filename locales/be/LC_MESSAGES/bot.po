@@ -1,0 +1,176 @@
+# Translations template for get_anime_bot.
+# Copyright (C) 2022 ORGANIZATION
+# This file is distributed under the same license as the get_anime_bot
+# project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: get_anime_bot VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2022-10-09 16:07+0300\n"
+"PO-Revision-Date: 2022-10-10 19:56+0300\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: be\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : 2);\n"
+"Generated-By: Babel 2.9.1\n"
+"X-Generator: Poedit 3.1.1\n"
+
+#: app/dialogs/main_menu.py:27
+msgid "Change language"
+msgstr "Змяніць мову"
+
+#: app/dialogs/main_menu.py:28
+msgid "Change settings"
+msgstr "Змяніць настройкі"
+
+#: app/dialogs/settings.py:14
+msgid "Choose your settings:"
+msgstr "Абярыце настройкі:"
+
+#: app/media_utils/genres.py:76
+msgid ""
+"Genres:\n"
+"\n"
+"{genres}"
+msgstr ""
+"Жанры: \n"
+"\n"
+"{genres}"
+
+#: app/dialogs/language.py:17 app/dialogs/settings.py:15
+#: app/dialogs/stats.py:21
+msgid "Go back"
+msgstr "Вярнуцца"
+
+#: app/dialogs/main_menu.py:18
+msgid ""
+"Hi, {first_name}!\n"
+"\n"
+"Get an anime GIF or image by genre!\n"
+"/genres_gif\n"
+"/genres_img\n"
+"/genres_all"
+msgstr ""
+"Прывітанне, {first_name}!\n"
+"\n"
+"Атрымай анімэ гіфку ці малюнак па жанру!\n"
+"/genres_gif\n"
+"/genres_img\n"
+"/genres_all"
+
+#: app/dialogs/settings.py:24
+msgid "Hide NSFW"
+msgstr "Схаваць NSFW"
+
+#: app/handlers/errors.py:15
+msgid "It looks like this message belongs to another person or something went wrong"
+msgstr "Здаецца, што гэты сказ належыць іншаму чалавеку, або нешта пайшло не так"
+
+#: app/dialogs/stats.py:29
+msgid "Media in database"
+msgstr "Медыя ў базе дадзеных"
+
+#: app/media_utils/genres.py:75
+msgid "No genres found"
+msgstr "Жанраў не знойдзена"
+
+#: app/media_utils/stats.py:20
+msgid "No media found"
+msgstr "Медыя не знойдзена"
+
+#: app/dialogs/language.py:16
+msgid "Select a language:"
+msgstr "Абярыце мову:"
+
+#: app/dialogs/stats.py:20
+msgid "Select a stats type:"
+msgstr "Абярыце тып статыстыкі:"
+
+#: app/dialogs/settings.py:23
+msgid "Show NSFW"
+msgstr "Паказваць NSFW"
+
+#: app/handlers/introduction.py:18
+msgid ""
+"The bot has open source code!\n"
+"\n"
+"{source_link}"
+msgstr ""
+"Бот мае адкрыты зыходны код!\n"
+"\n"
+"{source_link}"
+
+#: app/media_utils/stats.py:76
+msgid ""
+"Total count: {total}\n"
+"GIF count: {gif}\n"
+"\tGenres SFW count:\n"
+"{sfw_media_gif_stats_text}\n"
+"\tGenres NSFW count:\n"
+"{nsfw_media_gif_stats_text}\n"
+"IMG count: {img}\n"
+"\tGenres SFW count:\n"
+"{sfw_media_img_stats_text}\n"
+"\tGenres NSFW count:\n"
+"{nsfw_media_img_stats_text}\n"
+"ALL count: {all}\n"
+"\tGenres SFW count:\n"
+"{sfw_media_all_stats_text}\n"
+"\tGenres NSFW count:\n"
+"{nsfw_media_all_stats_text}\n"
+"SFW count: {sfw}\n"
+"NSFW count: {nsfw}"
+msgstr ""
+"Агульная колькасць: {total}\n"
+"У тым ліку {sfw} SFW і {nsfw} NSFW\n"
+"\n"
+"Усяго GIF: {gif}\n"
+"\tУ тым ліку SFW жанраў:\n"
+"{sfw_media_gif_stats_text}\n"
+"\tУ тым ліку NSFW жанраў:\n"
+"{nsfw_media_gif_stats_text}\n"
+"Усяго IMG: {img}\n"
+"\tУ тым ліку SFW жанраў:\n"
+"{sfw_media_img_stats_text}\n"
+"\tУ тым ліку NSFW жанраў:\n"
+"{nsfw_media_img_stats_text}\n"
+"Усяго ALL: {all}\n"
+"\tУ тым ліку SFW жанраў:\n"
+"{sfw_media_all_stats_text}\n"
+"\tУ тым ліку NSFW жанраў:\n"
+"{nsfw_media_all_stats_text}"
+
+#: app/dialogs/main_menu.py:29
+msgid "View statistics"
+msgstr "Паглядзець статыстыку"
+
+#: app/dialogs/stats.py:31
+msgid "Viewed media by all"
+msgstr "Прагледжаныя ўсімі медыя"
+
+#: app/dialogs/stats.py:30
+msgid "Viewed media by me"
+msgstr "Прагледжаныя мною медыя"
+
+#: app/handlers/media.py:153
+msgid "You aren't allowed to view NSFW-content publicly!"
+msgstr "Вам не дазволена глядзець NFSW публічна!"
+
+#: app/handlers/media.py:144
+msgid ""
+"You aren't allowed to view NSFW-content!\n"
+"\n"
+"/settings — change settings"
+msgstr ""
+"Вам не дазволена глядзець NSFW!\n"
+"\n"
+"/settings — змяніць у настройках"
+
+#: app/handlers/media.py:82
+msgid "You've viewed all media on this genre. Try again later!"
+msgstr "Вы праглядзелі ўсе медыя гэтага жанру. Паспрабуйце пазней!"

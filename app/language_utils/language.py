@@ -12,13 +12,12 @@ class LanguageData:
         self.label = f"{self.flag} {self.title}"
 
 
-DEFAULT_LANGUAGE = LanguageData(
-    code="en",
-    flag="🇺🇸",
-    title="English",
-)
 AVAILABLE_LANGUAGES = {
-    "en": DEFAULT_LANGUAGE,
+    "en": LanguageData(
+        code="en",
+        flag="🇺🇸",
+        title="English",
+    ),
     "ru": LanguageData(
         code="ru",
         flag="🇷🇺",
@@ -29,7 +28,13 @@ AVAILABLE_LANGUAGES = {
         flag="🇺🇦",
         title="Українська",
     ),
+    "be": LanguageData(
+        code="be",
+        flag="🇧🇾",
+        title="Беларуская",
+    ),
 }
+DEFAULT_LANGUAGE = AVAILABLE_LANGUAGES["en"]
 
 
 def get_locale_or_default(locale: str | None = None) -> str:
