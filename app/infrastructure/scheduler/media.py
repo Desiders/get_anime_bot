@@ -4,8 +4,7 @@ from typing import NoReturn
 
 from aiohttp import ClientError
 from app.infrastructure.database.repositories import UnitOfWork
-from app.infrastructure.media import (MediaSource, NekosFun, NekosLife,
-                                      WaifuPics)
+from app.infrastructure.media import MediaSource, NekosFun, NekosLife, WaifuPics
 from app.infrastructure.media.base.schemas import Media
 from sqlalchemy.exc import IntegrityError, NoResultFound
 from sqlalchemy.orm import sessionmaker
@@ -14,11 +13,11 @@ from structlog.stdlib import BoundLogger
 
 logger: BoundLogger = get_logger()
 
-SLEEP_FOR_NEKOS_FUN = 0.5
-SLEEP_FOR_NEKOS_LIFE = 0.3
-SLEEP_FOR_WAIFU_PICS = 0.3
+SLEEP_FOR_NEKOS_FUN = 1
+SLEEP_FOR_NEKOS_LIFE = 1
+SLEEP_FOR_WAIFU_PICS = 1
 
-SLEEP_AFTER_ERROR = 5
+SLEEP_AFTER_ERROR = 30
 
 
 async def create_source_and_get_source_id(
@@ -140,7 +139,7 @@ async def parse_waifu_pics(
 async def create_uow(
     sa_sessionmaker: sessionmaker,
 ) -> UnitOfWork:
-    async with sa_sessionmaker() as session:
+    async with sa_sessionmaker() as session:  # type: ignore
         return UnitOfWork(session)
 
 
