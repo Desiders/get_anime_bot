@@ -182,8 +182,6 @@ class MediaRepo(Repo):
             .limit(limit)
         )
 
-        logger.info("Get not viewed media", query=str(query))
-
         result = await self.session.execute(query)
 
         return result.scalars().all()
