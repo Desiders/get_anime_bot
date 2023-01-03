@@ -9,15 +9,9 @@ def get_sorted_genres_gif(
     show_nsfw: bool,
 ) -> list[str]:
     if show_nsfw:
-        genres = list(chain.from_iterable(
-            source.genres_gif
-            for source in sources
-        ))
+        genres = list(chain.from_iterable(source.genres_gif for source in sources))
     else:
-        genres = list(chain.from_iterable(
-            source.sfw_genres_gif
-            for source in sources
-        ))
+        genres = list(chain.from_iterable(source.sfw_genres_gif for source in sources))
     return sorted(genres)
 
 
@@ -26,15 +20,9 @@ def get_sorted_genres_img(
     show_nsfw: bool,
 ) -> list[str]:
     if show_nsfw:
-        genres = list(chain.from_iterable(
-            source.genres_img
-            for source in sources
-        ))
+        genres = list(chain.from_iterable(source.genres_img for source in sources))
     else:
-        genres = list(chain.from_iterable(
-            source.sfw_genres_img
-            for source in sources
-        ))
+        genres = list(chain.from_iterable(source.sfw_genres_img for source in sources))
     return sorted(genres)
 
 
@@ -43,15 +31,9 @@ def get_sorted_genres_all(
     show_nsfw: bool,
 ) -> list[str]:
     if show_nsfw:
-        genres = list(chain.from_iterable(
-            source.genres_all
-            for source in sources
-        ))
+        genres = list(chain.from_iterable(source.genres_all for source in sources))
     else:
-        genres = list(chain.from_iterable(
-            source.sfw_genres_all
-            for source in sources
-        ))
+        genres = list(chain.from_iterable(source.sfw_genres_all for source in sources))
     return sorted(genres)
 
 
@@ -73,8 +55,6 @@ def get_sorted_genres(
 def get_text_by_genres(genres: list[str], _: I18nGettext) -> str:
     if not genres:
         return _("No genres found")
-    return _(
-        "Genres:\n\n{genres}"
-    ).format(
+    return _("Genres:\n\n{genres}").format(
         genres=" ".join(map(lambda string: "/" + string, genres)),
     )

@@ -3,8 +3,11 @@ import asyncio
 from aiogram import Bot, Dispatcher
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
 from aiogram.contrib.middlewares.environment import EnvironmentMiddleware
-from aiogram.types import (BotCommand, BotCommandScopeAllGroupChats,
-                           BotCommandScopeAllPrivateChats)
+from aiogram.types import (
+    BotCommand,
+    BotCommandScopeAllGroupChats,
+    BotCommandScopeAllPrivateChats,
+)
 from aiogram_dialog import DialogRegistry
 from sqlalchemy.orm import sessionmaker
 from structlog import get_logger
@@ -12,13 +15,14 @@ from structlog.stdlib import BoundLogger
 
 from app.config_reader import load_config
 from app.constants import LOCALES_DIR
-from app.dialogs import (language_dialog, main_menu_dialog, settings_dialog,
-                         stats_dialog)
-from app.handlers import (register_error_handlers, register_genre_handlers,
-                          register_introduction_handlers)
+from app.dialogs import language_dialog, main_menu_dialog, settings_dialog, stats_dialog
+from app.handlers import (
+    register_error_handlers,
+    register_genre_handlers,
+    register_introduction_handlers,
+)
 from app.infrastructure.database import make_connection_string, sa_sessionmaker
-from app.infrastructure.media import (MediaSource, NekosFun, NekosLife,
-                                      WaifuPics)
+from app.infrastructure.media import MediaSource, NekosFun, NekosLife, WaifuPics
 from app.infrastructure.scheduler import start_parse_media
 from app.language_utils.language import DEFAULT_LANGUAGE
 from app.logging_config import logging_configure
@@ -62,14 +66,20 @@ async def set_bot_commands(bot: Bot):
     )
 
     public = [
-        cmd_help, cmd_gif,
-        cmd_img, cmd_all,
+        cmd_help,
+        cmd_gif,
+        cmd_img,
+        cmd_all,
     ]
     private = [
-        cmd_help, cmd_gif,
-        cmd_img, cmd_all,
-        cmd_source, cmd_language,
-        cmd_settings, cmd_stats,
+        cmd_help,
+        cmd_gif,
+        cmd_img,
+        cmd_all,
+        cmd_source,
+        cmd_language,
+        cmd_settings,
+        cmd_stats,
     ]
 
     await bot.set_my_commands(public, BotCommandScopeAllGroupChats())
@@ -90,11 +100,13 @@ def setup_middlewares(
 ):
     dp.setup_middleware(DatabaseMiddleware(sm))
     dp.setup_middleware(ACLMiddleware())
-    dp.setup_middleware(I18nMiddleware(
-        domain="bot",
-        path=LOCALES_DIR,
-        default=DEFAULT_LANGUAGE.code,
-    ))
+    dp.setup_middleware(
+        I18nMiddleware(
+            domain="bot",
+            path=LOCALES_DIR,
+            default=DEFAULT_LANGUAGE.code,
+        )
+    )
     dp.setup_middleware(EnvironmentMiddleware({"sources": sources}))
 
 

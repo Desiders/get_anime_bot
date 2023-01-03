@@ -13,15 +13,11 @@ class MediaRepo(Repo):
     async def get_media_stats(self) -> Stats:
         query = select(
             func.count(1).label("total"),
-            func.count(
-                case([(MediaModel.media_type == "gif", 1)])).label("gif"),
-            func.count(
-                case([(MediaModel.media_type == "img", 1)])).label("img"),
-            func.count(
-                case([(MediaModel.media_type == "all", 1)])).label("all"),
+            func.count(case([(MediaModel.media_type == "gif", 1)])).label("gif"),
+            func.count(case([(MediaModel.media_type == "img", 1)])).label("img"),
+            func.count(case([(MediaModel.media_type == "all", 1)])).label("all"),
             func.count(case([(MediaModel.is_sfw.is_(True), 1)])).label("sfw"),
-            func.count(case([(MediaModel.is_sfw.is_(False), 1)])).label(
-                "nsfw"),
+            func.count(case([(MediaModel.is_sfw.is_(False), 1)])).label("nsfw"),
         )
         second_query = select(
             func.count(1).label("total"),
@@ -29,7 +25,8 @@ class MediaRepo(Repo):
             MediaModel.media_type.label("media_type"),
             MediaModel.is_sfw.label("is_sfw"),
         ).group_by(
-            MediaModel.genre, MediaModel.media_type,
+            MediaModel.genre,
+            MediaModel.media_type,
             MediaModel.is_sfw,
         )
 
@@ -50,34 +47,42 @@ class MediaRepo(Repo):
         )
 
     async def get_viewed_media_stats(self) -> Stats:
-        query = select(
-            func.count(1).label("total"),
-            func.count(
-                case([(MediaModel.media_type == "gif", 1)])).label("gif"),
-            func.count(
-                case([(MediaModel.media_type == "img", 1)])).label("img"),
-            func.count(
-                case([(MediaModel.media_type == "all", 1)])).label("all"),
-            func.count(case([(MediaModel.is_sfw.is_(True), 1)])).label("sfw"),
-            func.count(case([(MediaModel.is_sfw.is_(False), 1)])).label(
-                "nsfw"),
-        ).join(
-            MediaModel, ViewModel.media_id == MediaModel.id,
-        ).select_from(
-            ViewModel,
+        query = (
+            select(
+                func.count(1).label("total"),
+                func.count(case([(MediaModel.media_type == "gif", 1)])).label("gif"),
+                func.count(case([(MediaModel.media_type == "img", 1)])).label("img"),
+                func.count(case([(MediaModel.media_type == "all", 1)])).label("all"),
+                func.count(case([(MediaModel.is_sfw.is_(True), 1)])).label("sfw"),
+                func.count(case([(MediaModel.is_sfw.is_(False), 1)])).label("nsfw"),
+            )
+            .join(
+                MediaModel,
+                ViewModel.media_id == MediaModel.id,
+            )
+            .select_from(
+                ViewModel,
+            )
         )
-        second_query = select(
-            func.count(1).label("total"),
-            MediaModel.genre.label("genre"),
-            MediaModel.media_type.label("media_type"),
-            MediaModel.is_sfw.label("is_sfw"),
-        ).join(
-            MediaModel, ViewModel.media_id == MediaModel.id,
-        ).select_from(
-            ViewModel,
-        ).group_by(
-            MediaModel.genre, MediaModel.media_type,
-            MediaModel.is_sfw,
+        second_query = (
+            select(
+                func.count(1).label("total"),
+                MediaModel.genre.label("genre"),
+                MediaModel.media_type.label("media_type"),
+                MediaModel.is_sfw.label("is_sfw"),
+            )
+            .join(
+                MediaModel,
+                ViewModel.media_id == MediaModel.id,
+            )
+            .select_from(
+                ViewModel,
+            )
+            .group_by(
+                MediaModel.genre,
+                MediaModel.media_type,
+                MediaModel.is_sfw,
+            )
         )
 
         result = await self.session.execute(query)
@@ -97,36 +102,45 @@ class MediaRepo(Repo):
         )
 
     async def get_viewed_media_stats_by_tg_id(self, tg_id: int) -> Stats:
-        query = select(
-            func.count(1).label("total"),
-            func.count(
-                case([(MediaModel.media_type == "gif", 1)])).label("gif"),
-            func.count(
-                case([(MediaModel.media_type == "img", 1)])).label("img"),
-            func.count(
-                case([(MediaModel.media_type == "all", 1)])).label("all"),
-            func.count(case([(MediaModel.is_sfw.is_(True), 1)])).label("sfw"),
-            func.count(case([(MediaModel.is_sfw.is_(False), 1)])).label(
-                "nsfw"),
-        ).join(
-            MediaModel, ViewModel.media_id == MediaModel.id,
-        ).select_from(
-            ViewModel,
-        ).where(
-            ViewModel.user_tg_id == tg_id,
+        query = (
+            select(
+                func.count(1).label("total"),
+                func.count(case([(MediaModel.media_type == "gif", 1)])).label("gif"),
+                func.count(case([(MediaModel.media_type == "img", 1)])).label("img"),
+                func.count(case([(MediaModel.media_type == "all", 1)])).label("all"),
+                func.count(case([(MediaModel.is_sfw.is_(True), 1)])).label("sfw"),
+                func.count(case([(MediaModel.is_sfw.is_(False), 1)])).label("nsfw"),
+            )
+            .join(
+                MediaModel,
+                ViewModel.media_id == MediaModel.id,
+            )
+            .select_from(
+                ViewModel,
+            )
+            .where(
+                ViewModel.user_tg_id == tg_id,
+            )
         )
-        second_query = select(
-            func.count(1).label("total"),
-            MediaModel.genre.label("genre"),
-            MediaModel.media_type.label("media_type"),
-            MediaModel.is_sfw.label("is_sfw"),
-        ).join(
-            MediaModel, ViewModel.media_id == MediaModel.id,
-        ).select_from(
-            ViewModel,
-        ).group_by(
-            MediaModel.genre, MediaModel.media_type,
-            MediaModel.is_sfw,
+        second_query = (
+            select(
+                func.count(1).label("total"),
+                MediaModel.genre.label("genre"),
+                MediaModel.media_type.label("media_type"),
+                MediaModel.is_sfw.label("is_sfw"),
+            )
+            .join(
+                MediaModel,
+                ViewModel.media_id == MediaModel.id,
+            )
+            .select_from(
+                ViewModel,
+            )
+            .group_by(
+                MediaModel.genre,
+                MediaModel.media_type,
+                MediaModel.is_sfw,
+            )
         )
 
         result = await self.session.execute(query)
@@ -153,18 +167,20 @@ class MediaRepo(Repo):
         is_sfw: bool,
         limit: int = 1,
     ) -> list[MediaModel]:
-        viewed_media_query = (
-            select(ViewModel.media_id)
-            .where(
-                ViewModel.user_tg_id == tg_id,
-            )
+        viewed_media_query = select(ViewModel.media_id).where(
+            ViewModel.user_tg_id == tg_id,
         )
-        query = select(MediaModel).where(
-            MediaModel.genre == genre,
-            MediaModel.media_type == media_type,
-            MediaModel.is_sfw.is_(is_sfw),
-            MediaModel.id.not_in(viewed_media_query),
-        ).order_by(func.random()).limit(limit)
+        query = (
+            select(MediaModel)
+            .where(
+                MediaModel.genre == genre,
+                MediaModel.media_type == media_type,
+                MediaModel.is_sfw.is_(is_sfw),
+                MediaModel.id.not_in(viewed_media_query),
+            )
+            .order_by(func.random())
+            .limit(limit)
+        )
 
         logger.info("Get not viewed media", query=str(query))
 
@@ -181,8 +197,10 @@ class MediaRepo(Repo):
         genre: str | None = None,
     ):
         query = insert(MediaModel).values(
-            url=url, genre=genre,
-            source_id=source_id, media_type=media_type,
+            url=url,
+            genre=genre,
+            source_id=source_id,
+            media_type=media_type,
             is_sfw=is_sfw,
         )
 

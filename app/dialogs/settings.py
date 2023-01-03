@@ -17,8 +17,9 @@ async def get_text(_: I18nGettext, **kwargs) -> dict[str, str]:
 
 
 async def get_settings(
-    _: I18nGettext, **kwargs,
-) -> dict[str, list[tuple[str,  str]]]:
+    _: I18nGettext,
+    **kwargs,
+) -> dict[str, list[tuple[str, str]]]:
     nsfw_settings = [
         (_("Show NSFW"), "show"),
         (_("Hide NSFW"), "hide"),

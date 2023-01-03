@@ -6,8 +6,7 @@ from sqlalchemy import insert, select, update
 class UserRepo(Repo):
     async def get_by_tg_id(self, tg_id: int) -> UserModel:
         result = await self.session.execute(
-            select(UserModel)
-            .where(UserModel.tg_id == tg_id)
+            select(UserModel).where(UserModel.tg_id == tg_id)
         )
 
         return result.scalar_one()
@@ -18,8 +17,7 @@ class UserRepo(Repo):
         language_code: str | None = None,
     ):
         await self.session.execute(
-            insert(UserModel)
-            .values(tg_id=tg_id, language_code=language_code)
+            insert(UserModel).values(tg_id=tg_id, language_code=language_code)
         )
 
     async def update_language_code(

@@ -1,8 +1,12 @@
 from itertools import chain
 
 from aiogram import Dispatcher
-from aiogram.types import (KeyboardButton, Message, ReplyKeyboardMarkup,
-                           ReplyKeyboardRemove)
+from aiogram.types import (
+    KeyboardButton,
+    Message,
+    ReplyKeyboardMarkup,
+    ReplyKeyboardRemove,
+)
 from aiogram.utils.exceptions import FileIsTooBig, WrongFileIdentifier
 from app.filters import CheckGenreIn, NSFWSettings
 from app.infrastructure.database.models import UserModel
@@ -80,8 +84,7 @@ async def genre_cmd(
     if not media_many:
         await m.reply(
             text=_(
-                "You've viewed all media on this genre. "
-                "Try again later!",
+                "You've viewed all media on this genre. " "Try again later!",
             ),
         )
         return
@@ -142,27 +145,20 @@ async def genre_cmd(
 async def forbidden_genre_cmd_private(m: Message, _: I18nGettext):
     await m.answer(
         text=_(
-            "You aren't allowed to view NSFW-content!\n\n"
-            "/settings — change settings"
+            "You aren't allowed to view NSFW-content!\n\n" "/settings — change settings"
         ),
     )
 
 
 async def forbidden_genre_cmd_public(m: Message, _: I18nGettext):
     await m.answer(
-        text=_(
-            "You aren't allowed to view NSFW-content publicly!"
-        ),
+        text=_("You aren't allowed to view NSFW-content publicly!"),
     )
 
 
 def register_genre_handlers(dp: Dispatcher, sources: set[MediaSource]):
-    sfw_genres = chain.from_iterable(
-        source.sfw_genres for source in sources
-    )
-    nsfw_genres = chain.from_iterable(
-        source.nsfw_genres for source in sources
-    )
+    sfw_genres = chain.from_iterable(source.sfw_genres for source in sources)
+    nsfw_genres = chain.from_iterable(source.nsfw_genres for source in sources)
 
     SFWGenres = CheckGenreIn(genres=sfw_genres)
     NSFWGenres = CheckGenreIn(genres=nsfw_genres)

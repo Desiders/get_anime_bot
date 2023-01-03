@@ -1,8 +1,7 @@
 from app.infrastructure.media.base import MediaSource
 from app.infrastructure.media.base.exceptions import GenreNotFound
 from app.infrastructure.media.base.schemas import Media, MediaGenre
-from app.infrastructure.media.base.typehints import (MediaGenreType,
-                                                     MediaUrlType)
+from app.infrastructure.media.base.typehints import MediaGenreType, MediaUrlType
 from structlog import get_logger
 from structlog.stdlib import BoundLogger
 
@@ -15,13 +14,22 @@ class NekosLife(MediaSource):
 
     RAW_SFW_GENRES: dict[str, set[str]] = {
         "gif": {
-            "tickle", "poke", "kiss",
-            "slap", "cuddle", "hug",
-            "pat", "feed", "neko",
-            "smug", "baka"
+            "tickle",
+            "poke",
+            "kiss",
+            "slap",
+            "cuddle",
+            "hug",
+            "pat",
+            "feed",
+            "neko",
+            "smug",
+            "baka",
         },
         "img": {
-            "neko", "kitsune", "holo",
+            "neko",
+            "kitsune",
+            "holo",
             "wallpaper",
         },
         "all": set(),

@@ -20,7 +20,7 @@ class DatabaseMiddleware(LifetimeControllerMiddleware):
         obj: Message | CallbackQuery,
         data: dict,
     ):
-        async with self.sa_sessionmaker() as session:
+        async with self.sa_sessionmaker() as session:  # type: ignore
             uow = UnitOfWork(session=session)
 
             data["uow"] = uow

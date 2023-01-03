@@ -1,5 +1,4 @@
-from aiogram.contrib.middlewares.i18n import \
-    I18nMiddleware as BaseI18nMiddleware
+from aiogram.contrib.middlewares.i18n import I18nMiddleware as BaseI18nMiddleware
 from aiogram.types import CallbackQuery, Message
 from app.infrastructure.database.models import UserModel
 from app.infrastructure.database.repositories.uow import UnitOfWork
@@ -22,7 +21,8 @@ class I18nMiddleware(BaseI18nMiddleware):
             uow: UnitOfWork = data["uow"]
 
             await uow.users.update_language_code(
-                user.tg_id, language_code,  # type: ignore
+                user.tg_id,
+                language_code,  # type: ignore
             )
             await uow.commit()
 

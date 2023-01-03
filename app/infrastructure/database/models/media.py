@@ -1,8 +1,15 @@
 from datetime import datetime
 
 from app.infrastructure.database import Base
-from sqlalchemy import (Boolean, Column, DateTime, ForeignKey, Integer, String,
-                        UniqueConstraint)
+from sqlalchemy import (
+    Boolean,
+    Column,
+    DateTime,
+    ForeignKey,
+    Integer,
+    String,
+    UniqueConstraint,
+)
 
 
 class MediaModel(Base):  # type: ignore

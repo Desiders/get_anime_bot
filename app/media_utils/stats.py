@@ -10,56 +10,46 @@ def get_sorted_media_by_total(media: list[Media]) -> list[Media]:
 
 def get_media_stats_text(media: list[Media], _: I18nGettext) -> str:
     if media := get_sorted_media_by_total(media):
-        text = "\n\t- ".join([
-            "{genre}: {total}".format(
-                genre=media.genre, total=media.total,
-            )
-            for media in get_sorted_media_by_total(media)
-        ])
+        text = "\n\t- ".join(
+            [
+                "{genre}: {total}".format(
+                    genre=media.genre,
+                    total=media.total,
+                )
+                for media in get_sorted_media_by_total(media)
+            ]
+        )
     else:
         text = _("No media found")
     return "\t- " + text
 
 
-def get_media_gif_stats_text(
-    media: list[Media], is_sfw: bool, _: I18nGettext
-) -> str:
+def get_media_gif_stats_text(media: list[Media], is_sfw: bool, _: I18nGettext) -> str:
     return get_media_stats_text(
         [
             media
             for media in media
-            if (
-                media.media_type == "gif" and
-                media.is_sfw == is_sfw
-            )
-        ], _,
+            if (media.media_type == "gif" and media.is_sfw == is_sfw)
+        ],
+        _,
     )
 
 
-def get_media_img_stats_text(
-    media: list[Media], is_sfw: bool,  _: I18nGettext
-) -> str:
+def get_media_img_stats_text(media: list[Media], is_sfw: bool, _: I18nGettext) -> str:
     return get_media_stats_text(
         [
             media
             for media in media
-            if (
-                media.media_type == "img" and
-                media.is_sfw == is_sfw
-            )
-        ], _,
+            if (media.media_type == "img" and media.is_sfw == is_sfw)
+        ],
+        _,
     )
 
 
-def get_media_all_stats_text(
-    media: list[Media], is_sfw: bool, _: I18nGettext
-) -> str:
+def get_media_all_stats_text(media: list[Media], is_sfw: bool, _: I18nGettext) -> str:
     return get_media_stats_text(
-        [
-            media
-            for media in media
-            if media.is_sfw == is_sfw
-        ], _,
+        [media for media in media if media.is_sfw == is_sfw],
+        _,
     )
 
 

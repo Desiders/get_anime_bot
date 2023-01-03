@@ -9,7 +9,8 @@ from app.typehints import I18nGettext
 
 async def get_text(
     _: I18nGettext,
-    dialog_manager: DialogManager, **kwargs,
+    dialog_manager: DialogManager,
+    **kwargs,
 ) -> dict[str, str]:
     data = dialog_manager.current_context().start_data  # type: ignore
     user: User = data["user"]  # type: ignore

@@ -1,8 +1,7 @@
 from app.infrastructure.media.base import MediaSource
 from app.infrastructure.media.base.exceptions import GenreNotFound
 from app.infrastructure.media.base.schemas import Media, MediaGenre
-from app.infrastructure.media.base.typehints import (MediaGenreType,
-                                                     MediaUrlType)
+from app.infrastructure.media.base.typehints import MediaGenreType, MediaUrlType
 from structlog import get_logger
 from structlog.stdlib import BoundLogger
 
@@ -15,18 +14,37 @@ class WaifuPics(MediaSource):
 
     RAW_SFW_GENRES: dict[str, set[str]] = {
         "gif": {
-            "bully", "cuddle", "cry",
-            "hug", "kiss", "lick",
-            "pat", "smug", "bonk",
-            "yeet", "blush", "smile",
-            "wave", "nom", "bite",
-            "glomp", "slap", "kill",
-            "kick", "happy", "wink",
-            "poke", "dance", "cringe",
+            "bully",
+            "cuddle",
+            "cry",
+            "hug",
+            "kiss",
+            "lick",
+            "pat",
+            "smug",
+            "bonk",
+            "yeet",
+            "blush",
+            "smile",
+            "wave",
+            "nom",
+            "bite",
+            "glomp",
+            "slap",
+            "kill",
+            "kick",
+            "happy",
+            "wink",
+            "poke",
+            "dance",
+            "cringe",
         },
         "img": {
-            "waifu", "neko", "shinobu",
-            "megumin", "awoo",
+            "waifu",
+            "neko",
+            "shinobu",
+            "megumin",
+            "awoo",
         },
         "all": set(),
     }
@@ -35,7 +53,9 @@ class WaifuPics(MediaSource):
             "blowjob",
         },
         "img": {
-            "waifu", "neko", "trap",
+            "waifu",
+            "neko",
+            "trap",
         },
         "all": set(),
     }

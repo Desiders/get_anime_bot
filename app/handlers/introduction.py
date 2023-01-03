@@ -15,10 +15,7 @@ async def menu_cmd(m: Message, dialog_manager: DialogManager):
 
 
 async def source_cmd(m: Message, _: I18nGettext):
-    text = _(
-        "The bot has open source code!\n\n"
-        "{source_link}"
-    ).format(
+    text = _("The bot has open source code!\n\n" "{source_link}").format(
         source_link=html_dec.link(
             "Source code",
             "https://github.com/Desiders/get_anime_bot",

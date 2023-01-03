@@ -19,12 +19,10 @@ async def get_text(_: I18nGettext, **kwargs) -> dict[str, str]:
 
 
 async def get_languages(
-    _: I18nGettext, **kwargs,
-) -> dict[str,  list[tuple[str | None, str]]]:
-    languages = [
-        (lang.label, lang.code)
-        for lang in AVAILABLE_LANGUAGES.values()
-    ]
+    _: I18nGettext,
+    **kwargs,
+) -> dict[str, list[tuple[str | None, str]]]:
+    languages = [(lang.label, lang.code) for lang in AVAILABLE_LANGUAGES.values()]
 
     return {
         "languages": languages,
@@ -47,7 +45,8 @@ async def select_language(
     uow: UnitOfWork = c.bot["uow"]
 
     await uow.users.update_language_code(
-        c.from_user.id, language_code,
+        c.from_user.id,
+        language_code,
     )
     await uow.commit()
 

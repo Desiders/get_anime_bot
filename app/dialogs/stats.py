@@ -23,8 +23,9 @@ async def get_text(_: I18nGettext, **kwargs) -> dict[str, str]:
 
 
 async def get_stats_types(
-    _: I18nGettext, **kwargs,
-) -> dict[str,  list[tuple[str, str]]]:
+    _: I18nGettext,
+    **kwargs,
+) -> dict[str, list[tuple[str, str]]]:
     stats_types = [
         (_("Media in database"), StatsType.MEDIA.name),
         (_("Viewed media by me"), StatsType.VIEWED_BY_ME.name),
@@ -37,7 +38,9 @@ async def get_stats_types(
 
 
 async def get_stats_text(
-    _: I18nGettext, dialog_manager: DialogManager, **kwargs,
+    _: I18nGettext,
+    dialog_manager: DialogManager,
+    **kwargs,
 ) -> dict[str, str | bool]:
     if stats_text := dialog_manager.data.get("stats_text"):
         return {
@@ -65,9 +68,7 @@ async def select_stats_type(
     elif stats_type_name == StatsType.VIEWED_BY_ALL.name:
         stats = await uow.media.get_viewed_media_stats()
     else:
-        raise NotImplementedError(
-            f"Stats type `{stats_type_name}` is not implemented"
-        )
+        raise NotImplementedError(f"Stats type `{stats_type_name}` is not implemented")
 
     manager.data["stats_text"] = get_media_stats_text(stats, _)
 

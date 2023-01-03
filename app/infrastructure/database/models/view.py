@@ -1,8 +1,14 @@
 from datetime import datetime
 
 from app.infrastructure.database import Base
-from sqlalchemy import (BigInteger, Column, DateTime, ForeignKey, Integer,
-                        UniqueConstraint)
+from sqlalchemy import (
+    BigInteger,
+    Column,
+    DateTime,
+    ForeignKey,
+    Integer,
+    UniqueConstraint,
+)
 
 
 class ViewModel(Base):  # type: ignore

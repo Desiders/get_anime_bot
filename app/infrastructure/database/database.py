@@ -11,9 +11,12 @@ def make_connection_string(
         "postgresql+asyncpg://{user}:{password}@{host}:{port}/{name}"
         "?async_fallback={async_fallback}"
     ).format(
-        user=database.user, password=database.password,
-        host=database.host, port=database.port,
-        name=database.name, async_fallback=async_fallback,
+        user=database.user,
+        password=database.password,
+        host=database.host,
+        port=database.port,
+        name=database.name,
+        async_fallback=async_fallback,
     )
 
 
@@ -23,6 +26,9 @@ def sa_sessionmaker(
 ) -> sessionmaker:
     return sessionmaker(
         bind=create_async_engine(connection_string, echo=echo, pool_size=100),
-        expire_on_commit=False, class_=AsyncSession,
-        future=True, autoflush=False, autocommit=False,
+        expire_on_commit=False,
+        class_=AsyncSession,
+        future=True,
+        autoflush=False,
+        autocommit=False,
     )

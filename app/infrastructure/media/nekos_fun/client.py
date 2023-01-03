@@ -14,29 +14,45 @@ class NekosFun(MediaSource):
 
     RAW_SFW_GENRES: dict[str, set[str]] = {
         "gif": {
-            "kiss", "lick", "hug",
-            "baka", "cry", "poke",
-            "smug", "slap", "tickle",
-            "pat", "laugh", "feed",
+            "kiss",
+            "lick",
+            "hug",
+            "baka",
+            "cry",
+            "poke",
+            "smug",
+            "slap",
+            "tickle",
+            "pat",
+            "laugh",
+            "feed",
             "cuddle",
         },
         "img": {
-            "animalears", "foxgirl", "neko",
+            "animalears",
+            "foxgirl",
+            "neko",
         },
         "all": set(),
     }
     RAW_NSFW_GENRES: dict[str, set[str]] = {
         "gif": {
-            "boobs", "cum", "lesbian",
+            "boobs",
+            "cum",
+            "lesbian",
             "anal",
         },
         "img": {
-            "hentai", "lewd", "holo",
+            "hentai",
+            "lewd",
+            "holo",
         },
         "all": {
-            "blowjob", "spank", "pussy",
+            "blowjob",
+            "spank",
+            "pussy",
             "feet",
-        }
+        },
     }
 
     async def get_media(
